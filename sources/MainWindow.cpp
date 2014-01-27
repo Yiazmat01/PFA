@@ -12,9 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     _main_widget = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout(_main_widget);
 
-    QPushButton *tools_button = new QPushButton(tr("Tools"));
-    QPushButton *quizz_button = new QPushButton(tr("Quizz"));
-    QPushButton *game_button = new QPushButton(tr("NotesExploder"));
+    QPushButton *tools_button = new QPushButton(QIcon(":/images/tools.png"), tr("Tools"));
+    QPushButton *quizz_button = new QPushButton(QIcon(":/images/quizz.png"), tr("Quizz"));
+    QPushButton *game_button = new QPushButton(QIcon(":/images/notes_exploder.png"), tr("NotesExploder"));
 
     layout->addWidget(tools_button);
     layout->addWidget(quizz_button);
@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Menu
     QMenu *fileMenu(this->menuBar()->addMenu(tr("File")));
-    fileMenu->addAction(QIcon(":/images/quit"), tr("Quit"), this, SLOT(close()));
+    fileMenu->addAction(QIcon(":/images/quit.png"), tr("Quit"), this, SLOT(close()));
 }
 
 MainWindow::~MainWindow()
@@ -42,6 +42,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::launch_tools()
 {
+
 }
 
 void MainWindow::launch_quizz()

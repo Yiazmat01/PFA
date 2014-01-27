@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+     <file>images/tools.png</file>
+     <file>images/quizz.png</file>
+     <file>images/notes_exploder.png</file>
+     <file>images/quit.png</file>
+</qresource>
+</RCC>

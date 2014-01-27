@@ -18,3 +18,6 @@ SOURCES += \
     sources/MainWindow.cpp \
     sources/main.cpp
 
+RESOURCES += \
+    resources.qrc
+
