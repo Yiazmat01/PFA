@@ -12,12 +12,20 @@ TARGET = musik
 TEMPLATE = app
 
 HEADERS += \
-    sources/MainWindow.h
+	sources/MainWindow.h \
+	sources/ToolsWidget.h \
+	sources/QuizzWidget.h \
+	sources/NotesExploderWidget.h
 
 SOURCES += \
-    sources/MainWindow.cpp \
-    sources/main.cpp
+	sources/MainWindow.cpp \
+	sources/main.cpp \
+	sources/ToolsWidget.cpp \
+	sources/QuizzWidget.cpp \
+	sources/NotesExploderWidget.cpp
+
+LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 RESOURCES += \
-    resources.qrc
+	resources.qrc
 

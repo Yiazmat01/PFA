@@ -1,64 +1,92 @@
 #include "MainWindow.h"
+#include "NotesExploderWidget.h"
+#include "QuizzWidget.h"
+#include "ToolsWidget.h"
 
 #include <QMenu>
 #include <QMenuBar>
 #include <QVBoxLayout>
 #include <QPushButton>
+#include <QDebug>
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    // Build main widget
-    _main_widget = new QWidget;
-    QVBoxLayout *layout = new QVBoxLayout(_main_widget);
+    // Build menu
+    QMenu *fileMenu(this->menuBar()->addMenu(tr("File")));
+    fileMenu->addAction(QIcon(":/images/quit.png"), tr("Quit"), this, SLOT(close()));
 
+    // Build main widget
+    this->buildWidget();
+
+    // Add main widget to the window
+    this->setCentralWidget(_main_widget);
+
+    // Set title
+    this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
+}
+
+MainWindow::~MainWindow()
+{
+    #ifndef QT_NO_DEBUG
+        qDebug() << "~MainWindow()";
+    #endif
+}
+
+void MainWindow::buildWidget()
+{
+    #define MUSIK_BUTTON_STYLE "QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
+                               "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00aaf2, stop: 1 #005676);" \
+                               "border-style: outset; border-radius: 10px; padding: 15px; }" \
+                               "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00ccf2, stop: 1 #007876); }"
+
+    #define MUSIK_LABEL_STYLE "QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }"
+
+    // Create label for title
+    QLabel *title_label = new QLabel("MuSIK : Musical Software Instrument for Kids");
+    title_label->setStyleSheet(MUSIK_LABEL_STYLE);
+
+    // Create main window buttons
     QPushButton *tools_button = new QPushButton(QIcon(":/images/tools.png"), tr("Tools"));
     QPushButton *quizz_button = new QPushButton(QIcon(":/images/quizz.png"), tr("Quizz"));
     QPushButton *game_button = new QPushButton(QIcon(":/images/notes_exploder.png"), tr("NotesExploder"));
-
-    tools_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
-                                "border-style: outset; border-radius: 10px; padding: 15px; }"
-                                "QPushButton:hover {background-color: #0080FF; }");
-    quizz_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
-                                "border-style: outset; border-radius: 10px; padding: 15px; }"
-                                "QPushButton:hover {background-color: #0080FF; }");
-    game_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
-                                "border-style: outset; border-radius: 10px; padding: 15px; }"
-                                "QPushButton:hover {background-color: #0080FF; }");
-
-    layout->addWidget(tools_button);
-    layout->addWidget(quizz_button);
-    layout->addWidget(game_button);
 
     connect(tools_button, SIGNAL(clicked()), this, SLOT(launch_tools()));
     connect(quizz_button, SIGNAL(clicked()), this, SLOT(launch_quizz()));
     connect(game_button, SIGNAL(clicked()), this, SLOT(launch_game()));
 
-    // Add main widget to the window
-    this->setCentralWidget(_main_widget);
+    tools_button->setStyleSheet(MUSIK_BUTTON_STYLE);
+    quizz_button->setStyleSheet(MUSIK_BUTTON_STYLE);
+    game_button->setStyleSheet(MUSIK_BUTTON_STYLE);
 
-    // Title
-    this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
+    // Add widgets
+    _main_widget = new QWidget(this);
 
-    // Menu
-    QMenu *fileMenu(this->menuBar()->addMenu(tr("File")));
-    fileMenu->addAction(QIcon(":/images/quit.png"), tr("Quit"), this, SLOT(close()));
-}
-
-MainWindow::~MainWindow()
-{
-
+    QVBoxLayout *layout = new QVBoxLayout(_main_widget);
+    layout->addWidget(title_label);
+    layout->addWidget(tools_button);
+    layout->addWidget(quizz_button);
+    layout->addWidget(game_button);
 }
 
 void MainWindow::launch_tools()
 {
-
+    this->setCentralWidget(new ToolsWidget(this));
 }
 
 void MainWindow::launch_quizz()
 {
+    this->setCentralWidget(new QuizzWidget(this));
 }
 
 void MainWindow::launch_game()
 {
+    this->setCentralWidget(new NotesExploderWidget(this));
+}
+
+void MainWindow::back()
+{
+    this->buildWidget();
+    this->setCentralWidget(_main_widget);
 }

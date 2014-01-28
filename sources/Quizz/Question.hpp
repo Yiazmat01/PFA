@@ -4,7 +4,7 @@
 #include <string>
 namespace musik
 {
-  
+
   class Question
   {
   private:
@@ -14,8 +14,8 @@ namespace musik
     const string _explaination;
     const int _time;
     const int _correct_answer;
-    
-    
+
+
   public:
     Question(const string, const string[4], const int, const string, const int);
     bool isRight(int);
