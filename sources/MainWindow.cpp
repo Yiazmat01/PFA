@@ -16,6 +16,16 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *quizz_button = new QPushButton(QIcon(":/images/quizz.png"), tr("Quizz"));
     QPushButton *game_button = new QPushButton(QIcon(":/images/notes_exploder.png"), tr("NotesExploder"));
 
+    tools_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
+                                "border-style: outset; border-radius: 10px; padding: 15px; }"
+                                "QPushButton:hover {background-color: #0080FF; }");
+    quizz_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
+                                "border-style: outset; border-radius: 10px; padding: 15px; }"
+                                "QPushButton:hover {background-color: #0080FF; }");
+    game_button->setStyleSheet("QPushButton { font: bold 20px; font-family: trebuchet ms; color: #FFF; background-color: #2E9AFE;"
+                                "border-style: outset; border-radius: 10px; padding: 15px; }"
+                                "QPushButton:hover {background-color: #0080FF; }");
+
     layout->addWidget(tools_button);
     layout->addWidget(quizz_button);
     layout->addWidget(game_button);
@@ -37,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    
+
 }
 
 void MainWindow::launch_tools()
