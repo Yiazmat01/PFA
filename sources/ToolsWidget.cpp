@@ -118,5 +118,20 @@ void ToolsWidget::launch_tool2() const
 
 void ToolsWidget::launch_tool3() const
 {
+    // Windows
+    #if defined(Q_OS_WIN32)
+        this->launch("audacity_win/audacity.exe");
 
+    // Unix
+    #elif defined(Q_OS_LINUX)
+        this->launch("audacity");
+
+    // Mac
+    #elif defined(Q_OS_MAC)
+        this->launch("audacity");
+
+    // Others operating systems
+    #else
+        QMessageBox::critical(NULL, tr("Error"), tr("We are sorry, this program is not available on your system"));
+    #endif
 }
