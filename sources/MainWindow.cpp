@@ -60,6 +60,10 @@ void MainWindow::buildWidget()
     quizz_button->setStyleSheet(MUSIK_BUTTON_STYLE);
     game_button->setStyleSheet(MUSIK_BUTTON_STYLE);
 
+    tools_button->setIconSize(QSize(25, 25));
+    quizz_button->setIconSize(QSize(25, 25));
+    game_button->setIconSize(QSize(25, 25));
+
     // Add widgets
     _main_widget = new QWidget(this);
 

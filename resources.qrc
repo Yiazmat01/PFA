@@ -6,5 +6,6 @@
         <file>images/quit.png</file>
         <file>images/tool_vlc.png</file>
         <file>images/tool_audacity.png</file>
+        <file>images/backward.png</file>
     </qresource>
 </RCC>

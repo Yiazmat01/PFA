@@ -31,9 +31,9 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
                                "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00ccf2, stop: 1 #007876); }"
 
     #define MUSIK_TOOLS_BUTTON_STYLE "QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
-                           "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ba2232, stop: 1 #560011);" \
-                           "border-style: outset; border-radius: 10px; padding: 20px; }" \
-                           "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e52232, stop: 1 #890011); }"
+                                     "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ba2232, stop: 1 #560011);" \
+                                     "border-style: outset; border-radius: 10px; padding: 20px; }" \
+                                     "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e52232, stop: 1 #890011); }"
 
     #define MUSIK_LABEL_STYLE "QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }"
 
@@ -45,7 +45,7 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     QPushButton *tool1_button = new QPushButton(QIcon(":/images/tool_vlc.png"), tr("VLC"));
     QPushButton *tool2_button = new QPushButton(QIcon(":/images/tool_audacity.png"), tr("Audacity"));
     QPushButton *tool3_button = new QPushButton(QIcon(":/images/tools.png"), tr("Metronimix"));
-    QPushButton *back_button = new QPushButton(QIcon(":/images/tools.png"), tr("Back"));
+    QPushButton *back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
 
     connect(tool1_button, SIGNAL(clicked()), this, SLOT(launch_tool1()));
     connect(tool2_button, SIGNAL(clicked()), this, SLOT(launch_tool2()));
@@ -57,6 +57,11 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     tool2_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
     tool3_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
     back_button->setStyleSheet(MUSIK_BUTTON_STYLE);
+
+    tool1_button->setIconSize(QSize(50, 50));
+    tool2_button->setIconSize(QSize(50, 50));
+    tool3_button->setIconSize(QSize(50, 50));
+    back_button->setIconSize(QSize(25, 25));
 
     // Add widgets
     QHBoxLayout *tools_layout = new QHBoxLayout;

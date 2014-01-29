@@ -34,12 +34,13 @@ void QuizzWidget::buildWidget(MainWindow *main_window)
     title_label->setStyleSheet(MUSIK_LABEL_STYLE);
 
     // Create tools buttons and back button
-    QPushButton *back_button = new QPushButton(QIcon(":/images/tools.png"), tr("Back"));
+    QPushButton *back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
 
     connect(back_button, SIGNAL(clicked()), main_window, SLOT(back()));
     connect(back_button, SIGNAL(clicked()), this, SLOT(close()));
 
     back_button->setStyleSheet(MUSIK_BUTTON_STYLE);
+    back_button->setIconSize(QSize(25, 25));
 
     // Add widgets
     QVBoxLayout *layout = new QVBoxLayout(this);
