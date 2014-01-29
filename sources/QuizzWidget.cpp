@@ -122,7 +122,7 @@ void QuizzWidget::answer()
 {
     // The right answer for the current question
     int answer = 1;
-    int selected_answer = 0;
+    int selected_answer = -1;
 
     // Colorize good and bad answer
     for (int i = 0; i < 4; i++)
