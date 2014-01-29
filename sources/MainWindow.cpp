@@ -41,11 +41,13 @@ void MainWindow::buildWidget()
                                "border-style: outset; border-radius: 10px; padding: 15px; }" \
                                "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00ccf2, stop: 1 #007876); }"
 
-    #define MUSIK_LABEL_STYLE "QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }"
-
     // Create label for title
     QLabel *title_label = new QLabel("MuSIK : Musical Software Instrument for Kids");
-    title_label->setStyleSheet(MUSIK_LABEL_STYLE);
+    QLabel *description_label = new QLabel("Welcome in MuSIK! You can try out some musical tools like VLC or Audacity,<br>"
+                                           "you can test your knowledge with the musical quizz or play NotesExploder to<br> "
+                                           "see if you are able to survive among many notes");
+    title_label->setStyleSheet("QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }");
+    description_label->setStyleSheet("QLabel { font: 14px; font-family: trebuchet ms; margin: 0 auto; }");
 
     // Create main window buttons
     QPushButton *tools_button = new QPushButton(QIcon(":/images/tools.png"), tr("Tools"));
@@ -69,6 +71,7 @@ void MainWindow::buildWidget()
 
     QVBoxLayout *layout = new QVBoxLayout(_main_widget);
     layout->addWidget(title_label);
+    layout->addWidget(description_label);
     layout->addWidget(tools_button);
     layout->addWidget(quizz_button);
     layout->addWidget(game_button);

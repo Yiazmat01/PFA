@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     int screenWidth = desktop.screenGeometry().width();
     int screenHeight = desktop.screenGeometry().height();
 
-    window.resize(700, 400);
+    window.resize(700, 450);
     window.move((screenWidth - window.width()) / 2, (screenHeight - window.height()) / 2);
     window.show();
 

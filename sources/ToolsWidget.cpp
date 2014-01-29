@@ -35,11 +35,15 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
                                      "border-style: outset; border-radius: 10px; padding: 20px; }" \
                                      "QPushButton:hover { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e52232, stop: 1 #890011); }"
 
-    #define MUSIK_LABEL_STYLE "QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }"
-
     // Create label for title
     QLabel *title_label = new QLabel("Musical tools availables");
-    title_label->setStyleSheet(MUSIK_LABEL_STYLE);
+    QLabel *description_label = new QLabel("<ul>"
+                                           "<li>VLC is useful to listen any kind of musical file (mp3, ogg, etc.)</li>"
+                                           "<li>Audacity is able to modify your files</li>"
+                                           "</ul>");
+
+    title_label->setStyleSheet("QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }");
+    description_label->setStyleSheet("QLabel { font: 14px; font-family: trebuchet ms; margin: 0 auto; }");
 
     // Create tools buttons and back button
     QPushButton *tool1_button = new QPushButton(QIcon(":/images/tool_vlc.png"), tr("VLC"));
@@ -71,6 +75,7 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(title_label);
+    layout->addWidget(description_label);
     layout->addLayout(tools_layout);
     layout->addWidget(back_button);
 }

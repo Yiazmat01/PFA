@@ -7,5 +7,7 @@
         <file>images/tool_vlc.png</file>
         <file>images/tool_audacity.png</file>
         <file>images/backward.png</file>
+        <file>images/next.png</file>
+        <file>images/validate.png</file>
     </qresource>
 </RCC>
