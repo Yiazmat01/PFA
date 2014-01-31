@@ -38,8 +38,8 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     // Create label for title
     QLabel *title_label = new QLabel("Musical tools availables");
     QLabel *description_label = new QLabel("<ul>"
-                                           "<li>VLC is useful to listen any kind of musical file (mp3, ogg, etc.)</li>"
-                                           "<li>Audacity is able to modify your files</li>"
+                                           "<li>" + tr("VLC is useful to listen any kind of musical file (mp3, ogg, etc.)") + "</li>"
+                                           "<li>" + tr("Audacity is able to modify your files") + "</li>"
                                            "</ul>");
 
     title_label->setStyleSheet("QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }");

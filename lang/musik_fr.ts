@@ -4,27 +4,32 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../sources/MainWindow.cpp" line="17"/>
+        <location filename="../sources/MainWindow.cpp" line="18"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../sources/MainWindow.cpp" line="18"/>
+        <location filename="../sources/MainWindow.cpp" line="19"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../sources/MainWindow.cpp" line="53"/>
+        <location filename="../sources/MainWindow.cpp" line="52"/>
+        <source>Welcome in MuSIK! You can try out some musical tools like VLC or Audacity,&lt;br&gt;you can test your knowledge with the musical quizz or play NotesExploder to&lt;br&gt; see if you are able to survive among many notes</source>
+        <translation>Bienvenue dans MuSIK ! Tu peux lancer des outils musicaux comme VLC ou Audacity,&lt;br&gt;tu peux tester tes connaissances grâce au Quizz musique ou jouer à NotesExploder&lt;br&gt; pour voir si tu arrives à repousser l&apos;invasion de notes venues de l&apos;espace .</translation>
+    </message>
+    <message>
+        <location filename="../sources/MainWindow.cpp" line="59"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../sources/MainWindow.cpp" line="54"/>
+        <location filename="../sources/MainWindow.cpp" line="60"/>
         <source>Quizz</source>
         <translation>Quizz</translation>
     </message>
     <message>
-        <location filename="../sources/MainWindow.cpp" line="55"/>
+        <location filename="../sources/MainWindow.cpp" line="61"/>
         <source>NotesExploder</source>
         <translation>NotesExploder</translation>
     </message>
@@ -57,6 +62,16 @@
 </context>
 <context>
     <name>ToolsWidget</name>
+    <message>
+        <location filename="../sources/ToolsWidget.cpp" line="41"/>
+        <source>VLC is useful to listen any kind of musical file (mp3, ogg, etc.)</source>
+        <translation>VLC permet d&apos;écouter n&apos;importe quel fichier audio (mp3, ogg, etc.)</translation>
+    </message>
+    <message>
+        <location filename="../sources/ToolsWidget.cpp" line="42"/>
+        <source>Audacity is able to modify your files</source>
+        <translation>Audacity peut modifier des pistes audio (echo, inversion du son, spectre, etc.)</translation>
+    </message>
     <message>
         <location filename="../sources/ToolsWidget.cpp" line="49"/>
         <source>VLC</source>
