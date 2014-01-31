@@ -30,7 +30,15 @@ MainWindow::MainWindow(QWidget *parent)
     // Create database
     Database* db = new Database();
     db->create();
-
+    QString a = "a";
+    QString b = "b";
+    QString c = "c";
+    QString d = "d";
+    QStringList ans;
+    ans << a << b << c << d;
+    Question* q = new Question("enonce",ans,2,"explication",4,30);
+    db->insertQuestion(q);
+    db->loadQuestions();
 }
 
 MainWindow::~MainWindow()
