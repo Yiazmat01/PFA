@@ -49,9 +49,9 @@ void MainWindow::buildWidget()
 
     // Create label for title
     QLabel *title_label = new QLabel("MuSIK : Musical Software Instrument for Kids");
-    QLabel *description_label = new QLabel("Welcome in MuSIK! You can try out some musical tools like VLC or Audacity,<br>"
+    QLabel *description_label = new QLabel(tr("Welcome in MuSIK! You can try out some musical tools like VLC or Audacity,<br>"
                                            "you can test your knowledge with the musical quizz or play NotesExploder to<br> "
-                                           "see if you are able to survive among many notes");
+                                           "see if you are able to survive among many notes"));
     title_label->setStyleSheet("QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }");
     description_label->setStyleSheet("QLabel { font: 14px; font-family: trebuchet ms; margin: 0 auto; }");
 
