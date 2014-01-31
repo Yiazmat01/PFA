@@ -2,6 +2,7 @@
 #include "NotesExploderWidget.h"
 #include "QuizzWidget.h"
 #include "ToolsWidget.h"
+#include "Database.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -25,6 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set title
     this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
+
+    // Create database
+    Database* db = new Database();
+    db->create();
+
 }
 
 MainWindow::~MainWindow()
