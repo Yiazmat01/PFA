@@ -1,28 +1,34 @@
 #ifndef QUESTION_HPP
 #define QUESTION_HPP
 
-#include <string>
+
+#include <QString>
+#include <QStringList>
+
+using namespace std;
+
 namespace musik
 {
-
+  
   class Question
   {
   private:
-    const string _question;
-    const string [4] _answer;
+    const QString _question;
+    const QStringList _answer;
     const int _n_answer;
-    const string _explaination;
-    const int _time;
+    const QString _explaination;
     const int _correct_answer;
-
-
+    const int _time;
+    
+    
   public:
-    Question(const string, const string[4], const int, const string, const int);
+    Question(const QString, const QStringList&, const int, const QString, const int, const int);
     bool isRight(int);
-    const string explaination();
-    const string answer(int);
-    const string question();
+    const QString explaination();
+    const QString answer(int);
+    const QString question();
     int correctAnswer();
+    int time();
   };
 }
 
