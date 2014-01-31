@@ -1,5 +1,4 @@
 #include "Database.h"
-#include "Progress.h"
 #include "Quizz/Question.hpp"
 
 #include <QDebug>
@@ -132,19 +131,10 @@ bool Database::loadQuestions()
 {
     bool result = false;
 
-    // Fetch number of films
-    int nbQuestions = 0;
-
-    if (this->exec("SELECT COUNT(id) AS nbFilms FROM Questions") && _query->next())
-        nbQuestions = _query->value(0).toInt();
-
-    this->clear();
 
     // Select all questions
     if (this->exec("SELECT * FROM Questions"))
     {
-        // Progress bar for waiting
-        Progress progress(QObject::tr("Open collection"), QObject::tr("Opening collection..."), nbQuestions);
 
         // Browse all results
         while (_query->next())
@@ -154,7 +144,7 @@ bool Database::loadQuestions()
                 << _query->value(2).toString()
                 << _query->value(3).toInt()
                 << _query->value(4).toInt();
-            progress.incrementValue();
+
         }
 
         result = true;
