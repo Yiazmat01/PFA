@@ -51,35 +51,27 @@ bool Database::compact()
 bool Database::create()
 {
     // Create table questions if not exists
-    bool result = this->exec("CREATE TABLE IF NOT EXISTS Questions("
+    bool result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
+                             "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
+                             "text          TEXT);");
+
+                  this->exec("CREATE TABLE IF NOT EXISTS Questions("
                              "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
                              "text          TEXT,"
                              "explaination  TEXT,"
                              "duration      INTEGER DEFAULT 30,"
-                             "score         INTEGER DEFAULT 0)"); //we may change default value
-/*
-                             "CREATE TABLE IF NOT EXISTS Answer("
-                             "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "text          TEXT);"
+                             "FOREIGN KEY(id_good_answer)   REFERENCES Answer(id),"
+                             "score         INTEGER DEFAULT 0);");
 
-                             "CREATE TABLE IF NOT EXISTS Quizz("
-                             "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "title          TEXT,"
-                             "highscore      INTEGER DEFAULT 0)"
-
-                             "CREATE TABLE IF NOT EXISTS Contains("
+                  this->exec("CREATE TABLE IF NOT EXISTS Contains("
                              "FOREIGN Key(id_question) REFERENCES Question(id),"
-                             "FOREIGN Key(id_quizz)   REFERENCES Quizz(id));"
+                             "FOREIGN Key(id_quizz)   REFERENCES Quizz(id));");
 
-                             "CREATE TABLE IF NOT EXISTS GoodAnswer("
-                             "FOREIGN Key(id_question) REFERENCES Question(id),"
-                             "FOREIGN Key(id_answer)   REFERENCES Answer(id));"
-
-                             "CREATE TABLE IF NOT EXISTS BadAnswer("
+                  this->exec("CREATE TABLE IF NOT EXISTS AnswerList("
                              "FOREIGN Key(id_question) REFERENCES Question(id),"
                              "FOREIGN Key(id_answer)   REFERENCES Answer(id));"
                              );
-  */
+
   this->clear();
     qDebug() << "base created ?" << result;
     return result;
