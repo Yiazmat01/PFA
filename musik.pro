@@ -29,3 +29,4 @@ LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 RESOURCES += \
 	resources.qrc
 
+TRANSLATIONS = translate/musik_fr.ts
