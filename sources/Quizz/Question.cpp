@@ -3,22 +3,21 @@
 
 namespace musik
 {
-  Question::Question(const QString q,const QStringList &tab, const int nb, const QString e, const int ok, const int t): _question(q),_n_answer(nb),_explaination(e), _correct_answer(ok), _time(t), _answer(tab)
+  Question::Question(const int id,const QString q,const QStringList &tab, const int nb, const QString e, int id_a, const int t, const int c_a):
+      _id(id), _question(q),_n_answer(nb),_explanation(e),
+      _id_correct_answer(id_a), _time(t), _answer(tab), _correct_answer(c_a)
   {
     
   }
    
-
-
-
   bool Question::isRight(int i)
   {
     return (i == _correct_answer);
   }
 
-  const QString Question::explaination()
+  const QString Question::explanation()
   {
-    return _explaination;
+    return _explanation;
   }
 
   const QString Question::answer(int i)

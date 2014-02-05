@@ -59,8 +59,8 @@ class Database
         // Set
         void setDatabaseName(const QString &name);
         bool insertQuestion(musik::Question *question);
-        bool loadQuestions();
-
+        QList<Question*> loadQuestions();
+        bool updateQuestion(Question * question);
     private:
         bool open();
         bool exec(const QString &query);

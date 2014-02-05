@@ -24,9 +24,6 @@ Database::Database()
     _db    = QSqlDatabase::addDatabase("QSQLITE");
     _db.setHostName("localhost");
     _db.setDatabaseName("base");
-    _db.setUserName("root");
-    _db.setPassword("");
-    qDebug() << "open ? " << _db.isOpen();
     _query = NULL;
 }
 
@@ -51,28 +48,42 @@ bool Database::compact()
 bool Database::create()
 {
     // Create table questions if not exists
-    bool result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
-                             "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "text          TEXT);");
+    bool result;
 
-                  this->exec("CREATE TABLE IF NOT EXISTS Questions("
-                             "id             INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "text          TEXT,"
-                             "explaination  TEXT,"
-                             "duration      INTEGER DEFAULT 30,"
-                             "FOREIGN KEY(id_good_answer)   REFERENCES Answer(id),"
-                             "score         INTEGER DEFAULT 0);");
+    if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
+                                 "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                 "text        TEXT);")))
+        qDebug() << "Problem with Answer creation.";
+    this->clear();
 
-                  this->exec("CREATE TABLE IF NOT EXISTS Contains("
-                             "FOREIGN Key(id_question) REFERENCES Question(id),"
-                             "FOREIGN Key(id_quizz)   REFERENCES Quizz(id));");
+    if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Theme("
+                                 "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                 "text        TEXT);")))
+        qDebug() << "Problem with Theme creation.";
+    this->clear();
 
-                  this->exec("CREATE TABLE IF NOT EXISTS AnswerList("
-                             "FOREIGN Key(id_question) REFERENCES Question(id),"
+    if(!( result = this->exec("CREATE TABLE IF NOT EXISTS Questions("
+                             "id               INTEGER PRIMARY KEY AUTOINCREMENT,"
+                             "text             TEXT,"
+                             "explanation     TEXT,"
+                             "id_good_answer   INTEGER,"
+                             "id_theme         INTEGER,"
+                             "score            INTEGER DEFAULT 0,"
+                             "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id),"
+                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id));"
+                               )))
+        qDebug() << "Problem with Questions creation";
+    this->clear();
+
+    if(!(result = this->exec("CREATE TABLE IF NOT EXISTS AnswerList("
+                             "id_question INTEGER,"
+                             "id_answer INTEGER,"
+                             "FOREIGN Key(id_question) REFERENCES Questions(id),"
                              "FOREIGN Key(id_answer)   REFERENCES Answer(id));"
-                             );
+                             )))
+        qDebug() << "Problem with AnswerList creation";
 
-  this->clear();
+    this->clear();
     qDebug() << "base created ?" << result;
     return result;
 }
@@ -100,11 +111,36 @@ bool Database::insertQuestion(musik::Question *question)
     bool result = false;
 
     // Create vars list for prepared query
-    QVariantList vars;
-    vars << question->question() << question->explaination() << 30;
+    int i, id_good_answer;
+    QVariantList vars_q, vars_a;
+    // We should use a QList
+    for(i = 0; i < 4; i++) {
+        vars_a << question->answer(i);
+        if (i = question->correctAnswer()) {
+            id_good_answer = i;
+        }
+    }
+
+    // Insert Answer
+    if (this->exec("INSERT INTO Answers(text, explanation, duration, id_good_answer) VALUES(?, ?, ?, ?)", vars_q))
+    {
+        QVariant id(_query->lastInsertId());
+
+        if (id.isValid())
+        {
+            //question->setId(id.toInt());
+            result = true;
+        }
+    }
+
+    this->clear();
+
+    vars_q << question->question()
+           << question->explanation()
+           << id_good_answer;//<< question->theme() << question->score();
 
     // Insert question
-    if (this->exec("INSERT INTO Questions(text, explaination, duration) VALUES(?, ?, ?)", vars))
+    if (this->exec("INSERT INTO Questions(text, explanation, duration, id_good_answer) VALUES(?, ?, ?, ?)", vars_q))
     {
         QVariant id(_query->lastInsertId());
 
@@ -119,33 +155,75 @@ bool Database::insertQuestion(musik::Question *question)
     return result;
 }
 
-bool Database::loadQuestions()
+QList<Question*> Database::loadQuestions()
 {
     bool result = false;
-
-
+    QList<Question*> questionList;
+    Question * question;
+    QStringList answers;
     // Select all questions
     if (this->exec("SELECT * FROM Questions"))
     {
-
         // Browse all results
         while (_query->next())
         {
-
-            qDebug() << _query->value(0).toInt() << _query->value(1).toString()
-                << _query->value(2).toString()
-                << _query->value(3).toInt()
-                << _query->value(4).toInt();
-
+            question = new Question( _query->value(0).toInt(),
+                                     _query->value(1).toString(),
+                                     answers,
+                                     4, //nb_answers
+                                     _query->value(2).toString(), //explanation
+                                     _query->value(3).toInt(), //id_good_answer
+                                     _query->value(5).toInt(),
+                                     -1); //time but soon score
+            questionList.append(question);
         }
-
         result = true;
     }
-
-    qDebug() <<"recoucou";
     this->clear();
-    return result;
+    return questionList;
 }
+
+bool Database::updateQuestion(Question * question)
+{
+    // Create vars list for prepared query
+    QVariantList vars_q, vars_a;
+    vars_q << question->question()
+         << question->explanation();
+         //<< id_good_answer;
+       //<< question->theme()
+       //<< question->score();
+
+    // Update Question
+    QString query_q("UPDATE Questions SET"
+                  "text = ?,"
+                  "explanation = ?,"
+                  "id_good_answer = ?,"
+                  "id_theme = ?,"
+                  "score = ?"
+                  "WHERE id = ?");
+
+    // faire le lien avec la table answerList
+    /*
+    for(i = 0; i < 4; i++) {
+        vars_a << question->answer(i) << question->answer(i);
+        if (i = question->correctAnswer()) {
+            id_good_answer = i;
+        }
+    }
+    QString query_a("UPDATE Answer SET "
+                    "text = ?,"
+                    "WHERE text = ?");
+    */
+    // Execute query
+    QString query_a;
+    bool result = this->exec(query_q, vars_q);
+    this->clear();
+
+    bool result2 = this->exec(query_a, vars_a);
+    this->clear();
+    return result && result2;
+}
+
 
 
 /*--------------------------------------------------------------------*\

@@ -13,18 +13,21 @@ namespace musik
   class Question
   {
   private:
+    const int _id;
     const QString _question;
     const QStringList _answer;
     const int _n_answer;
-    const QString _explaination;
+    const QString _explanation;
+    int _id_correct_answer;
     const int _correct_answer;
     const int _time;
+
     
     
   public:
-    Question(const QString, const QStringList&, const int, const QString, const int, const int);
+    Question(const int, const QString, const QStringList&, const int, const QString, int, const int, const int);
     bool isRight(int);
-    const QString explaination();
+    const QString explanation();
     const QString answer(int);
     const QString question();
     int correctAnswer();
