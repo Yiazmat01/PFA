@@ -17,7 +17,9 @@ HEADERS += \
 	sources/QuizzWidget.h \
 	sources/NotesExploderWidget.h \
     sources/Database.h \
-    sources/Quizz/Question.hpp
+    sources/Quizz/Question.hpp \
+    sources/Quizz/Score.hpp \
+    sources/Quizz/Quizz.hpp
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -26,7 +28,10 @@ SOURCES += \
 	sources/QuizzWidget.cpp \
 	sources/NotesExploderWidget.cpp \
     sources/Database.cpp \
-    sources/Quizz/Question.cpp
+    sources/Quizz/Question.cpp \
+    sources/Quizz/Score.cpp \
+    sources/Quizz/Quizz.cpp \
+    sources/Quizz/test.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
@@ -34,3 +39,6 @@ RESOURCES += \
 	resources.qrc
 
 TRANSLATIONS = lang/musik_fr.ts
+
+OTHER_FILES += \
+    sources/Quizz/Makefile
