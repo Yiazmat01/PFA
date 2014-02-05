@@ -22,7 +22,7 @@ namespace musik
         bool isFinished();
         void refreshScore(int); // the argument of refreshScore is the number of the answer that has been chosen
         int combo();
-        int time();
+        QTime time();
 
     };
 

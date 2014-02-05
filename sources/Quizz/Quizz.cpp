@@ -8,41 +8,42 @@
 
 namespace musik{
 
-Quizz::Quizz(QList<Question>): _current_score(Score(0)), _combo(0),_time(QTime()), _current_question(-1)
+Quizz::Quizz(QList<Question>): _current_score(Score()), _combo(0),_time(QTime()), _current_question(-1)
     {
 
     }
 
 
-    Question nextQuestion()
+    Question Quizz::nextQuestion()
     {
         _time = QTime::currentTime();
-        return _qestions.at(++_current_question);
+        return _questions.at(++_current_question);
     }
 
-    bool isFinished()
+    bool Quizz::isFinished()
     {
         return (_questions.size() -1 == _current_question);
     }
 
-    void refreshScore(int i)
+    void Quizz::refreshScore(int i)
     {
-        QTime answer_time = QTime::secsTo(_time);
-        if (_questions.at(_current_question).isRight())
+        int answer_time = _time.secsTo(QTime::currentTime());
+        if (_questions[_current_question].isRight(i))
         {
             _combo++;
+            _current_score.add((1+_combo)* _questions[_current_question].difficulty() / answer_time);
 
         }
         _combo = 0;
     }
 
 
-    int combo()
+    int Quizz::combo()
     {
         return _combo;
     }
 
-    int time()
+    QTime Quizz::time()
     {
         return _time;
     }
