@@ -160,25 +160,46 @@ QList<Question*> Database::loadQuestions()
     bool result = false;
     QList<Question*> questionList;
     Question * question;
-    QStringList answers;
+    int good_answer, current_id=0;
     // Select all questions
-    if (this->exec("SELECT * FROM Questions"))
-    {
+
+    if (this->exec("SELECT q.*, a.*"
+                   "FROM Questions as q, Answer as a, AnswerList as l"
+                   "WHERE l.id_question = q.id "
+                   "AND       l.id_answer =  a.id;"))
+    {   qDebug() << "coucou" ;
         // Browse all results
         while (_query->next())
         {
-            question = new Question( _query->value(0).toInt(),
-                                     _query->value(1).toString(),
+            QStringList answers;
+
+            //get answerslist from current question
+            while(current_id == _query->value(0).toInt()) {
+                answers << _query->value(7).toString();
+                _query->next();
+            }
+
+            qDebug() << answers ;
+
+            /* il faut choisir aléatoirement la bonne réponse (tu vois ce que jveux dire)  */
+            question = new Question( _query->value(1).toString(),
                                      answers,
-                                     4, //nb_answers
-                                     _query->value(2).toString(), //explanation
-                                     _query->value(3).toInt(), //id_good_answer
-                                     _query->value(5).toInt(),
-                                     -1); //time but soon score
+                                     4, // nb_answers
+                                     _query->value(2).toString(), // explanation
+                                     42, // difficulty
+                                     good_answer, //
+                                     _query->value(5).toInt(), // id_theme
+                                     2014); // time but soon score
+            // _query->value(0).toInt() //id
+            // _query->value(3).toInt(), // id_good_answer
             questionList.append(question);
+
+
+            current_id = _query->value(0).toInt();
         }
         result = true;
     }
+    qDebug() << _db.lastError();
     this->clear();
     return questionList;
 }
