@@ -1,4 +1,5 @@
 #include "Question.hpp"
+#include "Score.hpp"
 #include <iostream>
 
 using namespace musik;

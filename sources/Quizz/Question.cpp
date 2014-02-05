@@ -3,9 +3,9 @@
 
 namespace musik
 {
-  Question::Question(const int id,const QString q,const QStringList &tab, const int nb, const QString e, int id_a, const int t, const int c_a):
-      _id(id), _question(q),_n_answer(nb),_explanation(e),
-      _id_correct_answer(id_a), _time(t), _answer(tab), _correct_answer(c_a)
+  Question::Question(const QString q,const QStringList &tab, const int nb, const QString e,  const int diff, const int c_a, const int th, const int y):
+      _id(-1), _question(q),_n_answer(nb),_explanation(e),
+      _id_correct_answer(-1), _difficulty(diff), _answer(tab), _correct_answer(c_a),_id_theme(th), _year(y)
   {
     
   }
@@ -37,10 +37,19 @@ namespace musik
     return _correct_answer;
   }
 
-  int Question::time()
+  int Question::difficulty()
   {
-    return _time;
+    return _difficulty;
   }
   
-
+  int Question::theme()
+  {
+    return _id_theme;
   }
+
+  int Question::year()
+  {
+    return _year;
+  }
+
+}
