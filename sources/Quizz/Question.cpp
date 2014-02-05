@@ -52,4 +52,14 @@ namespace musik
     return _year;
   }
 
+  void set_id(int i)
+  {
+      _id = i;
+  }
+
+  void set_id_correct_answer(int i)
+  {
+      _id_correct_answer = i;
+  }
+
 }

@@ -37,6 +37,8 @@ namespace musik
     int difficulty();
     int theme();
     int year();
+    void set_id(int);
+    void set_id_correct_answer(int);
   };
 }
 
