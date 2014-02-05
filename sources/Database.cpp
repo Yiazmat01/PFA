@@ -160,29 +160,49 @@ QList<Question*> Database::loadQuestions()
     bool result = false;
     QList<Question*> questionList;
     Question * question;
-    int good_answer, current_id=0;
+    int good_answer, current_id=1, nb_questions=0;
     // Select all questions
 
-    if (this->exec("SELECT q.*, a.*"
-                   "FROM Questions as q, Answer as a, AnswerList as l"
-                   "WHERE l.id_question = q.id "
-                   "AND       l.id_answer =  a.id;"))
-    {   qDebug() << "coucou" ;
+    if (this->exec("SELECT COUNT(*) FROM Questions;"))
+    {
+        _query->next();
+        nb_questions=_query->value(0).toInt();
+    }
+    for(int i=1; i<=nb_questions;i++) {
+        QVariantList vars;
+        vars << i;
+        QString query("Select q.*, a.*\
+                       from Questions as q, Answer as a, AnswerList as l\
+                       where l.id_question = ?\
+                       and q.id=l.id_question\
+                       and l.id_answer = a.id");
+        if(this->exec(query,vars)){
+        qDebug() << "coucou" ;
+        QStringList answers;
+        while (_query->next()){
+            qDebug()<<"next";
+            answers << _query->value(7).toString();
+        }
+        qDebug() << answers;
+        }
+}
+ /*       {
         // Browse all results
-        while (_query->next())
+
         {
-            QStringList answers;
+
 
             //get answerslist from current question
-            while(current_id == _query->value(0).toInt()) {
-                answers << _query->value(7).toString();
-                _query->next();
-            }
+            //do{
+             while(current_id == _query->value(0).toInt()) {
+              qDebug() << current_id;
 
+              _query->next();
+            }
             qDebug() << answers ;
 
             /* il faut choisir aléatoirement la bonne réponse (tu vois ce que jveux dire)  */
-            question = new Question( _query->value(1).toString(),
+            /*question = new Question( _query->value(1).toString(),
                                      answers,
                                      4, // nb_answers
                                      _query->value(2).toString(), // explanation
@@ -193,12 +213,13 @@ QList<Question*> Database::loadQuestions()
             // _query->value(0).toInt() //id
             // _query->value(3).toInt(), // id_good_answer
             questionList.append(question);
+*/
 
-
-            current_id = _query->value(0).toInt();
-        }
+   /*         current_id = _query->value(0).toInt();
+        }*/
         result = true;
-    }
+
+
     qDebug() << _db.lastError();
     this->clear();
     return questionList;

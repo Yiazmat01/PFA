@@ -1,4 +1,4 @@
-#include "Question.hpp"
+/*#include "Question.hpp"
 #include "Score.hpp"
 #include <iostream>
 
@@ -21,9 +21,9 @@ int main (){
   QString e = "Parce que, MAIS PARCE QUE !";
   int ok = 3;
   int time = 50;
+*/
+  /*Question q1(q, t, nb, e, ok, time);
+  qDebug(q1.answer(q1.correctAnswer()).toLatin1());*/
 
-  Question q1(q, t, nb, e, ok, time);
-  qDebug(q1.answer(q1.correctAnswer()).toLatin1());
-
-  return 0;
-}
+  /*return 0;
+}*/
