@@ -35,6 +35,7 @@ namespace musik
     const QString answer(int);
     const QString question();
     int correctAnswer();
+    int nbAnswer();
     int difficulty();
     int theme();
     int year();

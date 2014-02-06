@@ -37,6 +37,11 @@ namespace musik
     return _correct_answer;
   }
 
+  int Question::nbAnswer()
+  {
+    return _n_answer;
+  }
+
   int Question::difficulty()
   {
     return _difficulty;

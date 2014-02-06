@@ -112,17 +112,26 @@ bool Database::insertQuestion(musik::Question *question)
 
     // Create vars list for prepared query
     int i, id_good_answer;
-    QVariantList vars_q, vars_a;
+    QVariantList vars_q, ids_a;
     // We should use a QList
-    for(i = 0; i < 4; i++) {
-        vars_a << question->answer(i);
-        if (i = question->correctAnswer()) {
-            id_good_answer = i;
-        }
+    for(i = 0; i < question->nbAnswer(); i++) {
+
+         QVariantList var;
+         var << question->answer(i);
+
+         if (!(this->exec("INSERT INTO Answer(text) VALUES(?)", var)))
+             return false;
+         QVariant id(_query->lastInsertId());
+
+         if (id.isValid())
+         {
+             ids_a << id;
+         }
+         this->clear();
     }
 
     // Insert Answer
-    if (this->exec("INSERT INTO Answers(text, explanation, duration, id_good_answer) VALUES(?, ?, ?, ?)", vars_q))
+    /*if (this->exec("INSERT INTO Answers(text) VALUES(?)", vars_q))
     {
         QVariant id(_query->lastInsertId());
 
@@ -131,24 +140,36 @@ bool Database::insertQuestion(musik::Question *question)
             //question->setId(id.toInt());
             result = true;
         }
-    }
+    }*/
 
     this->clear();
 
     vars_q << question->question()
            << question->explanation()
-           << id_good_answer;//<< question->theme() << question->score();
+           << question->correctAnswer()
+           << question->theme();
+    qDebug()<<vars_q;
 
     // Insert question
-    if (this->exec("INSERT INTO Questions(text, explanation, duration, id_good_answer) VALUES(?, ?, ?, ?)", vars_q))
+    if (this->exec("INSERT INTO Questions(text, explanation, id_good_answer, id_theme) VALUES(?, ?, ?, ?)", vars_q))
     {
+        qDebug() << "insertion";
         QVariant id(_query->lastInsertId());
+        qDebug()<<id;
 
         if (id.isValid())
         {
-            //question->setId(id.toInt());
+            question->set_id(id.toInt());
             result = true;
         }
+    }
+
+    foreach(QVariant i, ids_a) {
+        QVariantList id_q_a;
+        id_q_a << question->id() << i;
+        if(!(this->exec("INSERT INTO AnswerList(id_question,id_answer) VALUES (?,?)", id_q_a)))
+            return false;
+        this->clear();
     }
 
     this->clear();
