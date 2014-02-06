@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
 */
 
     db->loadQuestions();
+
 }
 
 MainWindow::~MainWindow()

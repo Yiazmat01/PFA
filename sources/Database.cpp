@@ -68,7 +68,7 @@ bool Database::create()
                              "explanation     TEXT,"
                              "id_good_answer   INTEGER,"
                              "id_theme         INTEGER,"
-                             "score            INTEGER DEFAULT 0,"
+                             //"score            INTEGER DEFAULT 0,"
                              "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id),"
                              "FOREIGN KEY (id_theme)         REFERENCES Theme(id));"
                                )))
@@ -164,8 +164,7 @@ QList<Question*> Database::loadQuestions()
     int good_answer, current_id=1, nb_questions=0;
     // Select all questions
 
-    if (this->exec("SELECT id FROM Questions;"))
-    {
+    if (this->exec("SELECT id FROM Questions;")) {
         while(_query->next()) {
             idList << _query->value(0).toInt();
         }
@@ -183,36 +182,39 @@ QList<Question*> Database::loadQuestions()
                        where l.id_question = ?\
                        and q.id=l.id_question\
                        and l.id_answer = a.id");
-        if(this->exec(query,vars)){
-        QStringList answers;
-        QList<int> idListAnswer;
-        while (_query->next()){
-            if(!stocked) {
-                stocked = true;
-                id_question =_query->value(0).toInt();
-                statement = _query->value(1).toString();
-                explanation = _query->value(2).toString();
-                id_good_answer = _query->value(3).toInt();
-                id_theme = _query->value(5).toInt();
+        if(this->exec(query,vars)) {
+            QStringList answers;
+            QList<int> idListAnswer;
+            while (_query->next()){
+                if(!stocked) {
+                    stocked = true;
+                    id_question =_query->value(0).toInt();
+                    statement = _query->value(1).toString();
+                    explanation = _query->value(2).toString();
+                    id_good_answer = _query->value(3).toInt();
+                    id_theme = _query->value(4).toInt();
+                }
+                answers << _query->value(6).toString();
+                idListAnswer << _query->value(5).toInt();
             }
-            answers << _query->value(7).toString();
-            idListAnswer << _query->value(6).toInt();
-        }
-        good_answer = findGoodAnswerPos(idListAnswer,id_good_answer);
-        qDebug() << answers;
-        question = new Question(statement,
-                                answers,
-                                answers.length(), // nb_answers
-                                explanation,
-                                42, // difficulty
-                                good_answer, //
-                                id_theme,
-                                2014); // time but soon score
-        question->set_id(id_question); //id
-        question->set_id_correct_answer(id_good_answer);
-        this->clear();
+            good_answer = findGoodAnswerPos(idListAnswer,id_good_answer);
+            qDebug() << answers;
+            question = new Question(statement,
+                                    answers,
+                                    answers.length(), // nb_answers
+                                    explanation,
+                                    42, // difficulty
+                                    good_answer, //
+                                    id_theme,
+                                    2014); // time but soon score
+            question->set_id(id_question); //id
+            question->set_id_correct_answer(id_good_answer);
+            question->debug();
+            questionList.append(question);
+            this->clear();
+
+      }
   }
-}
  /*       {
         // Browse all results
 

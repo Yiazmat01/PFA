@@ -4,6 +4,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QDebug>
 
 using namespace std;
 
@@ -38,7 +39,10 @@ namespace musik
     int theme();
     int year();
     void set_id(int);
+    int id();
     void set_id_correct_answer(int);
+    int id_correct_answer();
+    void debug();
   };
 }
 

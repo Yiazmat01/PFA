@@ -57,9 +57,31 @@ namespace musik
       _id = i;
   }
 
+  int Question::id()
+  {
+      return _id;
+  }
+
   void Question::set_id_correct_answer(int i)
   {
       _id_correct_answer = i;
   }
 
+  int Question::id_correct_answer()
+  {
+      return _id_correct_answer;
+  }
+
+  void Question::debug()
+  {
+      qDebug() << "id :"<< _id << endl
+               << "question :"<< _question << endl
+               << "answer :"<< _answer << endl
+               << "explanation :"<< _explanation << endl
+               << "correct_answer :"<< _correct_answer << endl
+               << "id_theme :"<< _id_theme << endl
+               << "year :"<< _year << endl
+               << "correct_answer :"<< _id_correct_answer << endl;
+  }
 }
+
