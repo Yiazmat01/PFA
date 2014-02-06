@@ -66,6 +66,7 @@ class Database
         bool exec(const QString &query);
         bool exec(const QString &query, const QVariantList &vars);
         void clear();
+        int findGoodAnswerPos(const QList<int>& idListAnswer, const int & id_good_answer);
 };
 
 #endif

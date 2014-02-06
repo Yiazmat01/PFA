@@ -160,31 +160,58 @@ QList<Question*> Database::loadQuestions()
     bool result = false;
     QList<Question*> questionList;
     Question * question;
+    QList<int> idList;
     int good_answer, current_id=1, nb_questions=0;
     // Select all questions
 
-    if (this->exec("SELECT COUNT(*) FROM Questions;"))
+    if (this->exec("SELECT id FROM Questions;"))
     {
-        _query->next();
-        nb_questions=_query->value(0).toInt();
+        while(_query->next()) {
+            idList << _query->value(0).toInt();
+        }
+        this->clear();
     }
-    for(int i=1; i<=nb_questions;i++) {
+
+    foreach(int id, idList) {
         QVariantList vars;
-        vars << i;
+        bool stocked = false;
+        QString statement, explanation;
+        int id_question, id_good_answer, id_theme;
+        vars << id;
         QString query("Select q.*, a.*\
                        from Questions as q, Answer as a, AnswerList as l\
                        where l.id_question = ?\
                        and q.id=l.id_question\
                        and l.id_answer = a.id");
         if(this->exec(query,vars)){
-        qDebug() << "coucou" ;
         QStringList answers;
+        QList<int> idListAnswer;
         while (_query->next()){
-            qDebug()<<"next";
+            if(!stocked) {
+                stocked = true;
+                id_question =_query->value(0).toInt();
+                statement = _query->value(1).toString();
+                explanation = _query->value(2).toString();
+                id_good_answer = _query->value(3).toInt();
+                id_theme = _query->value(5).toInt();
+            }
             answers << _query->value(7).toString();
+            idListAnswer << _query->value(6).toInt();
         }
+        good_answer = findGoodAnswerPos(idListAnswer,id_good_answer);
         qDebug() << answers;
-        }
+        question = new Question(statement,
+                                answers,
+                                answers.length(), // nb_answers
+                                explanation,
+                                42, // difficulty
+                                good_answer, //
+                                id_theme,
+                                2014); // time but soon score
+        question->set_id(id_question); //id
+        question->set_id_correct_answer(id_good_answer);
+        this->clear();
+  }
 }
  /*       {
         // Browse all results
@@ -353,4 +380,15 @@ void Database::clear()
     }
 
     _db.close();
+}
+
+int Database::findGoodAnswerPos(const QList<int>& idListAnswer, const int & id_good_answer)
+{
+    int i=0;
+    foreach(int id, idListAnswer) {
+        if (id == id_good_answer)
+            return i;
+        i++;
+    }
+    return -1;
 }
