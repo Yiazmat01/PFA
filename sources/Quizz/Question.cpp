@@ -40,9 +40,18 @@ namespace musik
 
    QString Question::answer(int i) const
   {
-    if ((i > _n_answer -1) && i < 0)
-      throw "Index out of bounds";
-    return _answer[i];
+   try
+   {
+        if ((i > _n_answer -1) && i < 0)
+        {
+            throw "Index out of bounds";
+        }
+   }
+   catch (const char * Msg)
+   {
+        std:cerr << Msg;
+   }
+   return _answer[i];
   }
 
    QString Question::question() const
@@ -105,6 +114,73 @@ namespace musik
                << "id_theme :"<< _id_theme << endl
                << "year :"<< _year << endl
                << "id_correct_answer :"<< _id_correct_answer << endl;
+  }
+
+  void Question::set_question(QString *s)
+  {
+      _question = *s;
+  }
+
+  void Question::set_explanation(QString *s)
+  {
+      _explanation = *s;
+  }
+  void Question::set_answer(QString *s, int i)
+  {
+      try
+      {
+          if (i < 0 || i > _n_answer)
+              throw "index out of bounds";
+      }
+      catch (const char * Msg)
+      {
+          std::cerr << Msg;
+      }
+      _answer.replace(i, *s);
+  }
+
+
+  void Question::set_difficulty(int i)
+  {
+      try
+      {
+          if (i < 1 || i > 3)
+              throw "difficulty out of bounds";
+      }
+      catch (const char * Msg)
+      {
+          std::cerr << Msg;
+      }
+      _difficulty = i;
+  }
+
+  void Question::set_id_theme(int i)
+  {
+      _id_theme = i;
+  }
+
+  void Question::set_year(int i)
+  {
+      _year = i;
+  }
+
+  void Question::addAnswer(QString *s)
+  {
+      _answer << *s;
+  }
+
+  void Question::deleteAnswer(int i)
+  {
+      try
+      {
+          if (i < 0 || i > _n_answer)
+              throw "index out of bounds";
+      }
+      catch (const char * Msg)
+      {
+          std::cerr << Msg;
+      }
+      _answer.removeAt(i);
   }
 }
 

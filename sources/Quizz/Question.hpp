@@ -39,12 +39,21 @@ namespace musik
     int difficulty() const;
     int theme() const;
     int year() const;
-    void set_id(int);
     int id() const;
-    void set_id_correct_answer(int);
     int id_correct_answer() const;
     void debug() const;
-    //void set_
+
+    void set_question(QString*);
+    void set_explanation(QString*);
+    void set_answer(QString*, int);
+    void set_id(int);
+    void set_id_correct_answer(int);
+    void set_difficulty(int);
+    void set_id_theme(int);
+    void set_year(int);
+
+    void addAnswer(QString *);
+    void deleteAnswer(int);
   };
 }
 
