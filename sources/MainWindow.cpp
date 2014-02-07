@@ -34,30 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Create database
     Database* db = new Database();
     db->create();
-    QString quest = "enonce";
-    QString e = "explication";
-    QString a = "a";
-    QString b = "b";
-    QString c = "c";
-    QString d = "d";
-    QStringList ans;
-    ans << a << b << c << d;
-    Question* q = new Question(quest,ans,4,e,100,3,1,2014);
-    db->insertQuestion(q);
-
-    quest = "enonce";
-    e = "explication";
-    a = "a";
-    b = "b";
-    c = "c";
-    d = "g";
-    ans.clear();
-    ans << a << b << c << d;
-    qDebug()<<ans;
-    Question* q1 = new Question(quest,ans,4,e,100,2,1,2014);
-    db->insertQuestion(q1);
-    db->loadQuestions();
-
+    QList<Question*> questionList = db->loadQuestions();
+    //questionList.value(i)->set...
 }
 
 MainWindow::~MainWindow()
