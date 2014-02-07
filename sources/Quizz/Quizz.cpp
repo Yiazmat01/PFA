@@ -28,13 +28,15 @@ Quizz::Quizz(QList<Question>): _current_score(Score()), _combo(0),_time(QTime())
     void Quizz::refreshScore(int i)
     {
         int answer_time = _time.secsTo(QTime::currentTime());
-        if (_questions[_current_question].isRight(i))
+        if (!_questions[_current_question].isRight(i))
         {
-            _combo++;
-            _current_score.add((1+_combo)* _questions[_current_question].difficulty() / answer_time);
+            _combo = 0;
+
 
         }
-        _combo = 0;
+
+        _current_score.add(_combo* _questions[_current_question].difficulty() / answer_time);
+        _combo++;
     }
 
 

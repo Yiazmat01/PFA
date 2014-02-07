@@ -15,35 +15,36 @@ namespace musik
   {
   private:
     int _id;
-    const QString _question;
-    const QStringList _answer;
-    const int _n_answer;
-    const QString _explanation;
+    QString _question;
+    QStringList _answer;
+    int _n_answer;
+    QString _explanation;
     int _id_correct_answer;
-    const int _correct_answer;
-    const int _difficulty;
-    const int _id_theme;
-    const int _year;
+    int _correct_answer;
+    int _difficulty;
+    int _id_theme;
+    int _year;
     
 
     
     
   public:
-    Question(const QString, const QStringList&, const int, const QString, const int, const int, const int, const int);
-    bool isRight(int);
-    const QString explanation();
-    const QString answer(int);
-    const QString question();
-    int correctAnswer();
-    int nbAnswer();
-    int difficulty();
-    int theme();
-    int year();
+    Question(QString, QStringList&, int, QString, int, int, int, int);
+    bool isRight(int) const;
+    QString explanation() const;
+    QString answer(int) const;
+    QString question() const;
+    int correctAnswer() const;
+    int nbAnswer() const;
+    int difficulty() const;
+    int theme() const;
+    int year() const;
     void set_id(int);
-    int id();
+    int id() const;
     void set_id_correct_answer(int);
-    int id_correct_answer();
-    void debug();
+    int id_correct_answer() const;
+    void debug() const;
+    //void set_
   };
 }
 
