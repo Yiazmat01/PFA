@@ -52,7 +52,7 @@ bool Database::create()
 
     if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
                                  "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "text        TEXT);")))
+                                 "text        TEXT UNIQUE);")))
         qDebug() << "Problem with Answer creation.";
     this->clear();
 
@@ -69,8 +69,8 @@ bool Database::create()
                              "id_good_answer   INTEGER,"
                              "id_theme         INTEGER,"
                              //"score            INTEGER DEFAULT 0,"
-                             "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id),"
-                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id));"
+                             "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id) ON DELETE CASCADE,"
+                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id) ON DELETE CASCADE);"
                                )))
         qDebug() << "Problem with Questions creation";
     this->clear();
@@ -78,8 +78,8 @@ bool Database::create()
     if(!(result = this->exec("CREATE TABLE IF NOT EXISTS AnswerList("
                              "id_question INTEGER,"
                              "id_answer INTEGER,"
-                             "FOREIGN Key(id_question) REFERENCES Questions(id),"
-                             "FOREIGN Key(id_answer)   REFERENCES Answer(id));"
+                             "FOREIGN Key(id_question) REFERENCES Questions(id) ON DELETE CASCADE,"
+                             "FOREIGN Key(id_answer)   REFERENCES Answer(id) ON DELETE CASCADE);"
                              )))
         qDebug() << "Problem with AnswerList creation";
 
@@ -131,7 +131,7 @@ bool Database::insertQuestion(musik::Question *question)
     }
 
     // Insert Answer
-    /*if (this->exec("INSERT INTO Answers(text) VALUES(?)", vars_q))
+    /*if (this->exec("INSERT IGNORE INTO Answers(text) VALUES(?)", vars_q))
     {
         QVariant id(_query->lastInsertId());
 
@@ -409,6 +409,7 @@ int Database::findGoodAnswerPos(const QList<int>& idListAnswer, const int & id_g
 {
     int i=0;
     foreach(int id, idListAnswer) {
+        qDebug()<<id;
         if (id == id_good_answer)
             return i;
         i++;

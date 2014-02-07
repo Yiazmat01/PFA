@@ -45,7 +45,17 @@ MainWindow::MainWindow(QWidget *parent)
     Question* q = new Question(quest,ans,4,e,100,4,1,2014);
     db->insertQuestion(q);
 
-
+    quest = "enonce";
+    e = "explication";
+    a = "a";
+    b = "b";
+    c = "c";
+    d = "g";
+    ans.clear();
+    ans << a << b << c << d;
+    qDebug()<<ans;
+    Question* q1 = new Question(quest,ans,4,e,100,2,1,2014);
+    db->insertQuestion(q1);
     db->loadQuestions();
 
 }
