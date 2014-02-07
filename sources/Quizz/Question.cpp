@@ -86,7 +86,7 @@ namespace musik
                << "correct_answer :"<< _correct_answer << endl
                << "id_theme :"<< _id_theme << endl
                << "year :"<< _year << endl
-               << "correct_answer :"<< _id_correct_answer << endl;
+               << "id_correct_answer :"<< _id_correct_answer << endl;
   }
 }
 

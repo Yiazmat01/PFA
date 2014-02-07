@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     QString d = "d";
     QStringList ans;
     ans << a << b << c << d;
-    Question* q = new Question(quest,ans,4,e,100,4,1,2014);
+    Question* q = new Question(quest,ans,4,e,100,3,1,2014);
     db->insertQuestion(q);
 
     quest = "enonce";

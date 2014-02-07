@@ -52,7 +52,7 @@ bool Database::create()
 
     if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
                                  "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "text        TEXT UNIQUE);")))
+                                 "text        TEXT );")))
         qDebug() << "Problem with Answer creation.";
     this->clear();
 
@@ -125,7 +125,10 @@ bool Database::insertQuestion(musik::Question *question)
 
          if (id.isValid())
          {
+             qDebug()<<id;
              ids_a << id;
+             if(i==question->correctAnswer())
+                 question->set_id_correct_answer(id.toInt());
          }
          this->clear();
     }
@@ -146,7 +149,7 @@ bool Database::insertQuestion(musik::Question *question)
 
     vars_q << question->question()
            << question->explanation()
-           << question->correctAnswer()
+           << question->id_correct_answer()
            << question->theme();
     qDebug()<<vars_q;
 
