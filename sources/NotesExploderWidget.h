@@ -1,5 +1,5 @@
-#ifndef NOTESEXPLODER_H
-#define NOTESEXPLODER_H
+#ifndef NOTESEXPLODERWIDGET_H
+#define NOTESEXPLODERWIDGET_H
 
 #include <QWidget>
 

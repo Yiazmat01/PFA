@@ -19,7 +19,9 @@ HEADERS += \
     sources/Database.h \
     sources/Quizz/Question.hpp \
     sources/Quizz/Score.hpp \
-    sources/Quizz/Quizz.hpp
+    sources/Quizz/Quizz.hpp \
+    sources/AdminQuizzWidget.h \
+    sources/ModifyQuestionWidget.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -31,7 +33,9 @@ SOURCES += \
     sources/Quizz/Question.cpp \
     sources/Quizz/Score.cpp \
     sources/Quizz/Quizz.cpp \
-    sources/Quizz/test.cpp
+    sources/Quizz/test.cpp \
+    sources/AdminQuizzWidget.cpp \
+    sources/ModifyQuestionWidget.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 

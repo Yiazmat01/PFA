@@ -3,6 +3,7 @@
 #include "QuizzWidget.h"
 #include "ToolsWidget.h"
 #include "Database.h"
+#include "AdminQuizzWidget.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -17,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
     // Build menu
     QMenu *fileMenu(this->menuBar()->addMenu(tr("File")));
     fileMenu->addAction(QIcon(":/images/quit.png"), tr("Quit"), this, SLOT(close()));
+
+    QMenu *adminMenu(this->menuBar()->addMenu(tr("Administration")));
+    adminMenu->addAction(QIcon(":/images/admin_quizz.png"), tr("Quizz administration"), this, SLOT(launch_admin_quizz()));
 
     // Build main widget
     this->buildWidget();
@@ -109,6 +113,11 @@ void MainWindow::launch_quizz()
 void MainWindow::launch_game()
 {
     this->setCentralWidget(new NotesExploderWidget(this));
+}
+
+void MainWindow::launch_admin_quizz()
+{
+    this->setCentralWidget(new AdminQuizzWidget(this));
 }
 
 void MainWindow::back()

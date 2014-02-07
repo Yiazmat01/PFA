@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
         void launch_quizz();
         void launch_game();
         void back();
+        void launch_admin_quizz();
 };
 
 #endif // MAINWINDOW_H
