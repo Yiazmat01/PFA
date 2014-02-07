@@ -1,3 +1,8 @@
+/*
+   - ajouter/modifier/supprimer un theme.
+   - supprimer une question.
+   - une question avec plusieurs theme ?
+*/
 #include "Database.h"
 #include "Quizz/Question.hpp"
 
@@ -65,12 +70,12 @@ bool Database::create()
     if(!( result = this->exec("CREATE TABLE IF NOT EXISTS Questions("
                              "id               INTEGER PRIMARY KEY AUTOINCREMENT,"
                              "text             TEXT,"
-                             "explanation     TEXT,"
+                             "explanation      TEXT,"
                              "id_good_answer   INTEGER,"
                              "id_theme         INTEGER,"
                              //"score            INTEGER DEFAULT 0,"
                              "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id) ON DELETE CASCADE,"
-                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id) ON DELETE CASCADE);"
+                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id) ON DELETE CASCADE ON UPDATE CASCADE);"
                                )))
         qDebug() << "Problem with Questions creation";
     this->clear();
@@ -84,6 +89,15 @@ bool Database::create()
         qDebug() << "Problem with AnswerList creation";
 
     this->clear();
+
+    if(!(result = this->exec("CREATE TABLE IF NOT EXISTS Comment("
+                             "id INTEGER,"
+                             "is_positive INTEGER(1),"
+                             "text TEXT);"
+                             )))
+        qDebug() << "Problem with Comment creation";
+    this->clear();
+
     qDebug() << "base created ?" << result;
     return result;
 }
@@ -281,41 +295,17 @@ QList<Question*> Database::loadQuestions()
 bool Database::updateQuestion(Question * question)
 {
     // Create vars list for prepared query
-    QVariantList vars_q, vars_a;
-    vars_q << question->question()
-         << question->explanation();
-         //<< id_good_answer;
-       //<< question->theme()
-       //<< question->score();
+    QVariantList vars_q;
+    vars_q << question->id();
 
     // Update Question
-    QString query_q("UPDATE Questions SET"
-                  "text = ?,"
-                  "explanation = ?,"
-                  "id_good_answer = ?,"
-                  "id_theme = ?,"
-                  "score = ?"
-                  "WHERE id = ?");
+    QString query_q("DELETE FROM Questions \
+                     WHERE id = ?");
 
-    // faire le lien avec la table answerList
-    /*
-    for(i = 0; i < 4; i++) {
-        vars_a << question->answer(i) << question->answer(i);
-        if (i = question->correctAnswer()) {
-            id_good_answer = i;
-        }
-    }
-    QString query_a("UPDATE Answer SET "
-                    "text = ?,"
-                    "WHERE text = ?");
-    */
     // Execute query
-    QString query_a;
     bool result = this->exec(query_q, vars_q);
     this->clear();
-
-    bool result2 = this->exec(query_a, vars_a);
-    this->clear();
+    bool result2 = this->insertQuestion(question);
     return result && result2;
 }
 
