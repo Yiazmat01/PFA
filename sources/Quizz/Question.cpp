@@ -3,56 +3,74 @@
 
 namespace musik
 {
-  Question::Question(const QString q,const QStringList &tab, const int nb, const QString e,  const int diff, const int c_a, const int th, const int y):
+  Question::Question( QString q, QStringList &tab,  int nb,  QString e,   int diff,  int c_a,  int th,  int y):
       _id(-1), _question(q),_n_answer(nb),_explanation(e),
       _id_correct_answer(-1), _difficulty(diff), _answer(tab), _correct_answer(c_a),_id_theme(th), _year(y)
   {
-    
+      try
+      {
+        if (_correct_answer > _n_answer || _correct_answer < 0)
+        {
+            throw "Correct answer out of bounds";
+        }
+        if (_difficulty > 3 || _difficulty < 1)
+        {
+            throw "Difficulty out of bounds, has to be between 1 and 3";
+        }
+        if  (_n_answer != _answer.size())
+        {
+            throw "the number of answers given differs from the number of answers provided";
+        }
+      }
+      catch (const char * Msg)
+      {
+          std::cerr << Msg;
+      }
   }
    
-  bool Question::isRight(int i)
+  bool Question::isRight(int i) const
   {
     return (i == _correct_answer);
   }
 
-  const QString Question::explanation()
+   QString Question::explanation() const
   {
     return _explanation;
   }
 
-  const QString Question::answer(int i)
+   QString Question::answer(int i) const
   {
     if ((i > _n_answer -1) && i < 0)
       throw "Index out of bounds";
     return _answer[i];
   }
 
-  const QString Question::question()
+   QString Question::question() const
   {
     return _question;
   }
 
-  int Question::correctAnswer()
+  int Question::correctAnswer() const
   {
     return _correct_answer;
   }
 
-  int Question::nbAnswer()
+  int Question::nbAnswer() const
   {
     return _n_answer;
   }
 
-  int Question::difficulty()
+  int Question::difficulty() const
   {
     return _difficulty;
   }
   
-  int Question::theme()
+  int Question::theme() const
   {
     return _id_theme;
   }
 
-  int Question::year()
+  int Question::year() const
   {
     return _year;
   }
@@ -62,7 +80,7 @@ namespace musik
       _id = i;
   }
 
-  int Question::id()
+  int Question::id() const
   {
       return _id;
   }
@@ -72,12 +90,12 @@ namespace musik
       _id_correct_answer = i;
   }
 
-  int Question::id_correct_answer()
+  int Question::id_correct_answer() const
   {
       return _id_correct_answer;
   }
 
-  void Question::debug()
+  void Question::debug() const
   {
       qDebug() << "id :"<< _id << endl
                << "question :"<< _question << endl
