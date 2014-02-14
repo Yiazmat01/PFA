@@ -21,7 +21,8 @@ HEADERS += \
     sources/Quizz/Score.hpp \
     sources/Quizz/Quizz.hpp \
     sources/AdminQuizzWidget.h \
-    sources/ModifyQuestionWidget.h
+    sources/ModifyQuestionWidget.h \
+    sources/QSFMLCanvas.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -35,7 +36,8 @@ SOURCES += \
     sources/Quizz/Quizz.cpp \
     sources/Quizz/test.cpp \
     sources/AdminQuizzWidget.cpp \
-    sources/ModifyQuestionWidget.cpp
+    sources/ModifyQuestionWidget.cpp \
+    sources/QSFMLCanvas.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
