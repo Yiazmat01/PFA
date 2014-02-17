@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
     Database* db = new Database();
     db->create();
     QList<Question*> questionList = db->loadQuestions();
+
+    db->deleteQuestion(questionList.value(0));
+
     //questionList.value(i)->set...
 }
 

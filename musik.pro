@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql sfml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,7 @@ HEADERS += \
     sources/Quizz/Quizz.hpp \
     sources/AdminQuizzWidget.h \
     sources/ModifyQuestionWidget.h \
-    sources/QSFMLCanvas.h
+ #   sources/QSFMLCanvas.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -37,7 +37,7 @@ SOURCES += \
     sources/Quizz/test.cpp \
     sources/AdminQuizzWidget.cpp \
     sources/ModifyQuestionWidget.cpp \
-    sources/QSFMLCanvas.cpp
+#    sources/QSFMLCanvas.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 

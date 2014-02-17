@@ -1,5 +1,6 @@
-#include "qsfmlcanvas.h"
+#include "QSFMLCanvas.h"
 #include <SFML/Window.hpp>
+
 QSFMLCanvas::QSFMLCanvas(QWidget* Parent, const QPoint& Position, const QSize& Size, unsigned int FrameTime) :
 QWidget       (Parent),
 myInitialized (false)
@@ -61,4 +62,5 @@ void QSFMLCanvas::paintEvent(QPaintEvent*)
     // On rafraîchit le widget
     sf::Window::display();
 }
+
 
