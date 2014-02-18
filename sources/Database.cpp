@@ -26,7 +26,7 @@ using namespace musik;
 Database::Database()
 {
     // Load SQLite driver
-    _db    = QSqlDatabase::addDatabase("QSQLITE");
+    _db = QSqlDatabase::addDatabase("QSQLITE");
     _db.setHostName("localhost");
     _db.setDatabaseName("base");
     _query = NULL;
@@ -333,6 +333,7 @@ bool Database::updateQuestion(Question * question)
     return result && result2;
 }
 
+
 bool Database::deleteQuestion(Question * question)
 {
     if (question == NULL) {
@@ -364,10 +365,44 @@ bool Database::deleteQuestion(Question * question)
     this->clear();
     result = result && this->exec(query_q3, vars_q);
     this->clear();
-    qDebug() << "suppresion ?" << result;
+    qDebug() << "suppresion question ?" << result;
     return result;
 }
 
+bool Database::deleteTheme(QString theme)
+{
+    if (theme == NULL) {
+        return false;
+    }
+    // Create vars list for prepared query
+    QVariantList vars_q;
+    vars_q << theme2id(theme);
+
+    // delete question
+    QString query_q("DELETE FROM Theme \
+                     WHERE id = ?");
+
+
+    // Execute query
+    bool result = this->exec(query_q, vars_q);
+    this->clear();
+    qDebug() << "suppresion theme ?" << result;
+    return result;
+}
+
+int Database::theme2id(QString theme)
+{
+    QVariantList vars_t;
+    vars_t << theme;
+    int id_theme;
+    if (this->exec("SELECT id FROM Theme WHERE text=?;",vars_t)) {
+        while(_query->next()) {
+            id_theme = _query->value(0).toInt();
+        }
+        this->clear();
+    }
+    return id_theme;
+}
 
 /*--------------------------------------------------------------------*\
         Private

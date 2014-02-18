@@ -64,6 +64,8 @@ class Database
         QList<QString> loadTheme();
         bool updateQuestion(Question * question);
         bool deleteQuestion(Question * question);
+        bool deleteTheme(QString theme);
+        int theme2id(QString theme);
     private:
         bool open();
         bool exec(const QString &query);

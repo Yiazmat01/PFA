@@ -36,7 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     db->create();
     QList<Question*> questionList = db->loadQuestions();
 
-    db->deleteQuestion(questionList.value(0));
+    //db->updateQuestion(questionList.value(0));
+    //db->deleteTheme("mon theme");
 
     //questionList.value(i)->set...
 }
