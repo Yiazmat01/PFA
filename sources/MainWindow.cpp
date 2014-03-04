@@ -32,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
 
     // Create database
-    Database* db = new Database();
-    db->create();
-    QList<Question*> questionList = db->loadQuestions();
+  //  Database* db = new Database();
+   // db->create();
+    //QList<Question*> questionList = db->loadQuestions();
 
     //db->updateQuestion(questionList.value(0));
     //db->deleteTheme("mon theme");

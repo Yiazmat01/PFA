@@ -56,11 +56,10 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
     // Create form
     _theme = new QLineEdit;
     _question = new QLineEdit;
-    _answer1 = new QLineEdit;
-    _answer2 = new QLineEdit;
-    _answer3 = new QLineEdit;
-    _answer4 = new QLineEdit;
-    _explaination = new QTextEdit;
+    _explanation = new QTextEdit;
+
+    for (int i = 0; i < 4; i++)
+        _answers << new QLineEdit;
 
     // Create validate and cancel buttons
     QPushButton *add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
@@ -81,16 +80,15 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
     layout->addWidget(_theme);
     layout->addWidget(new QLabel(tr("Question")));
     layout->addWidget(_question);
-    layout->addWidget(new QLabel(tr("Answer 1")));
-    layout->addWidget(_answer1);
-    layout->addWidget(new QLabel(tr("Answer 2")));
-    layout->addWidget(_answer2);
-    layout->addWidget(new QLabel(tr("Answer 3")));
-    layout->addWidget(_answer3);
-    layout->addWidget(new QLabel(tr("Answer 4")));
-    layout->addWidget(_answer4);
+
+    for (int i = 0; i < 4; i++)
+    {
+        layout->addWidget(new QLabel(tr("Answer")));
+        layout->addWidget(_answers[i]);
+    }
+
     layout->addWidget(new QLabel(tr("Explaination")));
-    layout->addWidget(_explaination);
+    layout->addWidget(_explanation);
 
     // Buttons layout
     QHBoxLayout *buttons_layout = new QHBoxLayout;
@@ -101,13 +99,15 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
 
 void ModifyQuestionWidget::save()
 {
-   /* Question::Question(const QString q,const QStringList &tab, const int nb, const QString e,  const int diff, const int c_a, const int th, const int y):
-        _id(-1), _question(q),_n_answer(nb),_explanation(e),
-        _id_correct_answer(-1), _difficulty(diff), _answer(tab), _correct_answer(c_a),_id_theme(th), _year(y)*/
     QStringList answers;
-    answers << _answer1->text() << _answer2->text() << _answer3->text() << _answer4->text();
-    Question question(_question->text(), answers, 4, _explaination->toPlainText(), 0, 0, 0, 0);
 
+    for (int i = 0; i < 4; i++)
+    {
+        if (_answers[i]->text().size() > 0)
+            answers << _answers[i]->text();
+    }
+
+    Question question(-1, _question->text(), answers, _explanation->toPlainText(), 1, 2014, 1);
     Database db;
     db.insertQuestion(&question);
     this->close();

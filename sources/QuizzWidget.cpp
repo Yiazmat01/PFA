@@ -1,5 +1,8 @@
 #include "QuizzWidget.h"
 #include "MainWindow.h"
+#include "Quizz/Quizz.hpp"
+#include "Database.h"
+#include "Quizz/Question.hpp"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -11,6 +14,10 @@
 QuizzWidget::QuizzWidget(QWidget *parent) :
     QWidget(parent)
 {
+    Database* db = new Database();
+    QList<Question*> questions = db->loadQuestions();
+    _quizz = new Quizz(questions);
+
     this->buildWidget(dynamic_cast<MainWindow*>(parent));
     this->showQuestion();
 }
@@ -94,28 +101,39 @@ void QuizzWidget::buildWidget(MainWindow *main_window)
 
 void QuizzWidget::showQuestion()
 {
-    // Question labels
-    _question_label->setText("1. Comment appelle-t-on une guitare miniature et ridicule à 4 cordes ?");
-
-    // Answers radio buttons
-    _answers_radio_buttons.at(0)->setText("Une guitare, pardis !");
-    _answers_radio_buttons.at(1)->setText("Un ukulélé");
-    _answers_radio_buttons.at(2)->setText("Un banjo, non ?");
-    _answers_radio_buttons.at(3)->setText("C'est quoi cette question condescendante ?");
-
-    // Reset answers
-    for (int i = 0; i < 4; i++)
+    if ( ! _quizz->isFinished())
     {
-        _answers_radio_buttons.at(i)->setCheckable(true);
-        _answers_radio_buttons.at(i)->setStyleSheet("font-weight: normal; color: #573;");
+        qDebug() << "Quizz not finished";
+        Question *question = _quizz->nextQuestion();
+
+        // Question labels
+        _question_label->setText(question->question());
+
+        // Answers
+        for (int i = 0; i < 4; i++)
+        {
+            if (i < question->nbAnswer())
+            {
+                _answers_radio_buttons.at(i)->setText(question->answer(i));
+                _answers_radio_buttons.at(i)->setCheckable(true);
+                _answers_radio_buttons.at(i)->setStyleSheet("font-weight: normal; color: #573;");
+                _answers_radio_buttons.at(i)->show();
+            }
+
+            else
+                _answers_radio_buttons.at(i)->hide();
+        }
+
+        // Clear explanation
+        _explanation_label->setVisible(false);
+
+        // Control buttons
+        _answer_button->setVisible(true);
+        _next_question_button->setVisible(false);
     }
 
-    // Clear explanation
-    _explanation_label->setVisible(false);
-
-    // Control buttons
-    _answer_button->setVisible(true);
-    _next_question_button->setVisible(false);
+    else
+        qDebug() << "Quizz finished";
 }
 
 void QuizzWidget::answer()

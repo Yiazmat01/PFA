@@ -1,13 +1,10 @@
 #include "Score.hpp"
 
 
-namespace musik
+Score::Score(): _score(0)
 {
 
-Score::Score(): _score(0)
-    {
-
-    }
+}
 
 int Score::score()
 {
@@ -29,4 +26,3 @@ void Score::add(int i)
     _score += i;
 }
 
-}

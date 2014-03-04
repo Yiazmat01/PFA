@@ -26,12 +26,9 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <QDebug>
 #include <QSqlDatabase>
 #include <QVariant>
 #include "Quizz/Question.hpp"
-
-using namespace musik;
 
 class Film;
 class Utils;
@@ -45,33 +42,27 @@ class Database
         QString       _error;
 
     public:
-        //Database(Utils *utils);
         Database();
         ~Database();
 
-        bool       compact();
-        bool       create();
-
-        // Get
-        QString error()  const;
-        QString dbname() const;
-
-        // Set
-        void setDatabaseName(const QString &name);
-        bool insertQuestion(musik::Question *question);
-        bool insertTheme(QString theme);
+        // Questions
+        bool insertQuestion(Question *question);
         QList<Question*> loadQuestions();
-        QList<QString> loadTheme();
         bool updateQuestion(Question * question);
         bool deleteQuestion(Question * question);
+
+        // Themes
+        bool insertTheme(QString theme);
+        QStringList loadThemes();
         bool deleteTheme(QString theme);
-        int theme2id(QString theme);
+
     private:
+        // Database
+        void create();
         bool open();
         bool exec(const QString &query);
         bool exec(const QString &query, const QVariantList &vars);
         void clear();
-        int findGoodAnswerPos(const QList<int>& idListAnswer, const int & id_good_answer);
 };
 
 #endif

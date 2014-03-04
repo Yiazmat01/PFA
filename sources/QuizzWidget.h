@@ -8,6 +8,7 @@ class QPushButton;
 class QLabel;
 class QRadioButton;
 class QVBoxLayout;
+class Quizz;
 
 class QuizzWidget : public QWidget
 {
@@ -28,6 +29,8 @@ class QuizzWidget : public QWidget
         QPushButton *_answer_button;
         QPushButton *_next_question_button;
         QPushButton *_back_button;
+
+        Quizz *_quizz;
 
     public:
         explicit QuizzWidget(QWidget *parent = 0);

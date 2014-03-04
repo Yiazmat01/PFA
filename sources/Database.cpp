@@ -1,35 +1,22 @@
-/*
-   - modifier/supprimer un theme.
-   - créer un objet theme ?
-   - une question avec plusieurs theme ?
-*/
 #include "Database.h"
 #include "Quizz/Question.hpp"
 
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QDir>
+#include <QMessageBox>
 
-using namespace musik;
-/*--------------------------------------------------------------------*\
-        Public
-\*--------------------------------------------------------------------*/
-
-/*Database::Database(Utils *utils)
-    : _utils(utils)
-{
-    // Load SQLite driver
-    _db    = QSqlDatabase::addDatabase("QSQLITE");
-    _query = NULL;
-}
-*/
 Database::Database()
 {
     // Load SQLite driver
     _db = QSqlDatabase::addDatabase("QSQLITE");
     _db.setHostName("localhost");
-    _db.setDatabaseName("base");
+    _db.setDatabaseName("db/quizz.db3");
     _query = NULL;
+
+    // Create database
+    this->create();
 }
 
 Database::~Database()
@@ -42,371 +29,190 @@ Database::~Database()
     this->clear();
 }
 
-bool Database::compact()
+void Database::create()
 {
-    // Clean erased data from database (which remains on disk when deleted)
-    bool result = this->exec("VACUUM");
-    this->clear();
-    return result;
-}
+    // Make "db" directory
+    QDir dir;
+    dir.mkdir("db");
 
-bool Database::create()
-{
-    // Create table questions if not exists
-    bool result;
-    if (!(result = this->exec("PRAGMA foreign_keys = ON;")))
-        qDebug() << "Problem with Pragma on.";
-    this->clear();
+    // Construct list of queries
+    QStringList queries;
 
-    if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Answer("
-                                 "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "text        TEXT );")))
-        qDebug() << "Problem with Answer creation.";
-    this->clear();
+    queries << "CREATE TABLE IF NOT EXISTS Themes("
+               "    id          INTEGER PRIMARY KEY AUTOINCREMENT,"
+               "    theme       TEXT"
+               ")";
 
-    if (!(result = this->exec("CREATE TABLE IF NOT EXISTS Theme("
-                                 "id          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                 "text        TEXT);")))
-        qDebug() << "Problem with Theme creation.";
-    this->clear();
+    queries << "CREATE TABLE IF NOT EXISTS Questions("
+               "    id               INTEGER PRIMARY KEY AUTOINCREMENT,"
+               "    question         TEXT,"
+               "    explanation      TEXT,"
+               "    difficulty       INTEGER,"
+               "    year             INTEGER,"
+               "    nb_answers       INTEGER,"
+               "    id_theme         INTEGER"
+               ")";
 
-    if(!( result = this->exec("CREATE TABLE IF NOT EXISTS Questions("
-                             "id               INTEGER PRIMARY KEY AUTOINCREMENT,"
-                             "text             TEXT,"
-                             "explanation      TEXT,"
-                             "id_good_answer   INTEGER,"
-                             "id_theme         INTEGER,"
-                             //"score          INTEGER DEFAULT 0,"
-                             "FOREIGN KEY (id_good_answer)   REFERENCES Answer(id) ON DELETE CASCADE,"
-                             "FOREIGN KEY (id_theme)         REFERENCES Theme(id) ON DELETE CASCADE);"
-                             //"PRIMARY KEY(id_good_answer, id_theme));"
-                               )))
-        qDebug() << "Problem with Questions creation";
-    this->clear();
+    queries << "CREATE TABLE IF NOT EXISTS Answers("
+               "    id          INTEGER PRIMARY KEY AUTOINCREMENT,"
+               "    answer      TEXT,"
+               "    id_question INTEGER"
+               ")";
 
-    if(!(result = this->exec("CREATE TABLE IF NOT EXISTS AnswerList("
-                             "id_question INTEGER,"
-                             "id_answer INTEGER,"
-                             "FOREIGN Key(id_question) REFERENCES Questions(id) ON DELETE CASCADE,"
-                             "FOREIGN Key(id_answer)   REFERENCES Answer(id) ON DELETE CASCADE,"
-                             "PRIMARY KEY (id_question, id_answer));"
-                             )))
-        qDebug() << "Problem with AnswerList creation";
+    queries << "CREATE TABLE IF NOT EXISTS Comments("
+               "    id INTEGER,"
+               "    is_positive INTEGER(1),"
+               "    comment TEXT"
+               ")";
 
-    this->clear();
+    bool result = true;
 
-    if(!(result = this->exec("CREATE TABLE IF NOT EXISTS Comment("
-                             "id INTEGER,"
-                             "is_positive INTEGER(1),"
-                             "text TEXT);"
-                             )))
-        qDebug() << "Problem with Comment creation";
-    this->clear();
-
-    qDebug() << "base created ?" << result;
-    return result;
-}
-
-// Get
-QString Database::error() const
-{
-    return _error;
-}
-
-QString Database::dbname() const
-{
-    return _db.databaseName();
-}
-
-// Set
-void Database::setDatabaseName(const QString &filename)
-{
-    this->clear();
-    _db.setDatabaseName(filename);
-}
-
-bool Database::insertQuestion(musik::Question *question)
-{
-    bool result = false;
-
-    // Create vars list for prepared query
-    int i, id_good_answer;
-    QVariantList vars_q, ids_a;
-    // We should use a QList
-    for(i = 0; i < question->nbAnswer(); i++) {
-
-         QVariantList var;
-         var << question->answer(i);
-
-         if (!(this->exec("INSERT INTO Answer(text) VALUES(?)", var)))
-             return false;
-         QVariant id(_query->lastInsertId());
-
-         if (id.isValid())
-         {
-             qDebug()<<id;
-             ids_a << id;
-             if(i==question->correctAnswer())
-                 question->set_id_correct_answer(id.toInt());
-         }
-         this->clear();
+    // Execute each query
+    foreach (QString query, queries)
+    {
+        if ( ! this->exec(query))
+        {
+            result = false;
+            break;
+        }
     }
 
-    // Insert Answer
-    /*if (this->exec("INSERT IGNORE INTO Answers(text) VALUES(?)", vars_q))
-    {
-        QVariant id(_query->lastInsertId());
+    if ( ! result)
+        QMessageBox::critical(NULL, QObject::tr("Error during database creation"), _error);
+}
 
-        if (id.isValid())
-        {
-            //question->setId(id.toInt());
-            result = true;
-        }
-    }*/
-
-    this->clear();
-
-    vars_q << question->question()
-           << question->explanation()
-           << question->id_correct_answer()
-           << question->theme();
-    qDebug()<<vars_q;
-
+//--------------------------------------------------------------------
+//        Questions
+//--------------------------------------------------------------------
+bool Database::insertQuestion(Question *question)
+{
     // Insert question
-    if (this->exec("INSERT INTO Questions(text, explanation, id_good_answer, id_theme) VALUES(?, ?, ?, ?)", vars_q))
+    QVariantList vars;
+    vars << question->question() << question->explanation() << question->difficulty() << question->year() << question->nbAnswer() << question->theme();
+
+    if ( ! this->exec("INSERT INTO Questions(question, explanation, difficulty, year, nb_answers, id_theme) VALUES(?, ?, ?, ?, ?, ?)", vars))
+        return false;
+
+    // Get question id
+    question->set_id(_query->lastInsertId().toInt());
+
+    // Insert answers (first one is the good answer)
+    for (int i = 0; i < question->nbAnswer(); i++)
     {
-        qDebug() << "insertion";
-        QVariant id(_query->lastInsertId());
-        qDebug()<<id;
+        vars.clear();
+        vars << question->answer(i) << question->id();
 
-        if (id.isValid())
-        {
-            question->set_id(id.toInt());
-            result = true;
-        }
+        if ( ! (this->exec("INSERT INTO Answers(answer, id_question) VALUES(?, ?)", vars)))
+             return false;
     }
 
-    foreach(QVariant i, ids_a) {
-        QVariantList id_q_a;
-        id_q_a << question->id() << i;
-        if(!(this->exec("INSERT INTO AnswerList(id_question,id_answer) VALUES (?,?)", id_q_a)))
-            return false;
-        this->clear();
-    }
-
-    this->clear();
-    return result;
-}
-
-bool Database::insertTheme(QString theme)
-{
-    bool result = false;
-
-    // Create vars list for prepared query
-    int i;
-    QVariantList vars_q;
-    this->clear();
-
-    vars_q << theme;
-    qDebug()<<vars_q;
-
-    // Insert theme
-    if (this->exec("INSERT INTO Theme(text) VALUES(?)", vars_q))
-    {
-        qDebug() << "insertion theme";
-        QVariant id(_query->lastInsertId());
-        qDebug()<<id;
-        if (id.isValid())
-        {
-            result = true;
-        }
-    }
-
-    this->clear();
-    return result;
+    return true;
 }
 
 QList<Question*> Database::loadQuestions()
 {
-    bool result = false;
-    QList<Question*> questionList;
-    Question * question;
-    QList<int> idList;
-    int good_answer, current_id=1, nb_questions=0;
-    // Select all questions
+    QList<Question*> questions;
 
-    if (this->exec("SELECT id FROM Questions;")) {
-        while(_query->next()) {
-            idList << _query->value(0).toInt();
-        }
-        this->clear();
-    }
+    // Get questions
+    if ( ! this->exec("SELECT q.id, q.question, q.explanation, q.difficulty, q.year, q.nb_answers, q.id_theme, a.answer "
+                      "FROM Questions q JOIN Answers a ON a.id_question = q.id "
+                      "ORDER BY a.id"))
+        return questions;
 
-    foreach(int id, idList) {
-        QVariantList vars;
-        bool stocked = false;
-        QString statement, explanation;
-        int id_question, id_good_answer, id_theme;
-        vars << id;
-        QString query("Select q.*, a.*\
-                      from Questions as q, Answer as a, AnswerList as l\
-                      where l.id_question = ?\
-                      and q.id=l.id_question\
-                      and l.id_answer = a.id");
-        if(this->exec(query,vars)) {
-        QStringList answers;
-        QList<int> idListAnswer;
-        while (_query->next()){
-            if(!stocked) {
-                stocked = true;
-                id_question =_query->value(0).toInt();
-                statement = _query->value(1).toString();
-                explanation = _query->value(2).toString();
-                id_good_answer = _query->value(3).toInt();
-                id_theme = _query->value(4).toInt();
-            }
-            answers << _query->value(6).toString();
-            idListAnswer << _query->value(5).toInt();
-        }
-        good_answer = findGoodAnswerPos(idListAnswer,id_good_answer);
-        qDebug() << answers;
-        question = new Question(statement,
-                                answers,
-                                answers.length(), // nb_answers
-                                explanation,
-                                42, // difficulty
-                                good_answer, //
-                                id_theme,
-                                2014); // time but soon score
-        question->set_id(id_question); //id
-        question->set_id_correct_answer(id_good_answer);
-        question->debug();
-        questionList.append(question);
-        this->clear();
-        }
-    }
-    result = true;
+    QStringList answers;
+    int nb_answers_max = 0;
 
-    qDebug() << _db.lastError();
-    this->clear();
-    return questionList;
-}
-
-QList<QString> Database::loadTheme()
-{
-    QList<QString> themeList;
-
-    // Select all theme
-    if (this->exec("SELECT text FROM Theme"))
+    while (_query->next())
     {
-        while(_query->next()) {
-            themeList << _query->value(0).toString();
+        // New question
+        if (nb_answers_max == 0)
+        {
+            nb_answers_max = _query->value(5).toInt();
+            answers.clear();
         }
-        this->clear();
+
+        // Add current answer to the set
+        answers << _query->value(7).toString();
+
+        // All answers are taken, we create the question
+        if (answers.size() == nb_answers_max)
+        {
+            questions << new Question(_query->value(0).toInt(),
+                                      _query->value(1).toString(),
+                                      answers,
+                                      _query->value(2).toString(),
+                                      _query->value(3).toInt(),
+                                      _query->value(4).toInt(),
+                                      _query->value(6).toInt());
+            nb_answers_max = 0;
+        }
     }
-    this->clear();
-    return themeList;
+
+    return questions;
 }
 
-
-bool Database::updateQuestion(Question * question)
+bool Database::updateQuestion(Question *question)
 {
-    if (question == NULL) {
-        return false;
-    }
-    // Create vars list for prepared query
-    QVariantList vars_q;
-    vars_q << question->id();
-
-    // Update Question
-    /*
-    QString query_q("DELETE FROM Questions \
-                     WHERE id = ?");
-
-    // Execute query
-    bool result = this->exec(query_q, vars_q);
-    this->clear();
-    */
-    bool result = this->deleteQuestion(question);
-    bool result2 = this->insertQuestion(question);
-    this->clear();
-    return result && result2;
+    return (question != NULL) && this->deleteQuestion(question) && this->insertQuestion(question);
 }
 
-
-bool Database::deleteQuestion(Question * question)
+bool Database::deleteQuestion(Question *question)
 {
-    if (question == NULL) {
+    if (question == NULL)
         return false;
-    }
+
     // Create vars list for prepared query
-    QVariantList vars_q;
-    vars_q << question->id();
+    QVariantList vars;
+    vars << question->id();
 
-    // delete question
-    QString query_q("DELETE FROM Questions \
-                     WHERE id = ?");
+    // Delete question
+    return this->exec("DELETE FROM Questions WHERE id = ?", vars) &&
+           this->exec("DELETE FROM Answers WHERE id_question = ?", vars);
+}
 
-    QString query_q2("DELETE FROM Answer \
-                      WHERE id IN \
-                        (SELECT a.id \
-                         FROM Answer as a, AnswerList as al \
-                         WHERE al.id_question = ? \
-                         AND al.id_answer = a.id)");
+//--------------------------------------------------------------------
+//        Themes
+//--------------------------------------------------------------------
+bool Database::insertTheme(QString theme)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << theme;
 
-    QString query_q3("DELETE FROM AnswerList \
-                      WHERE id_question = ? ");
+    // Insert theme
+    return this->exec("INSERT INTO Themes(theme) VALUES(?)", vars);
+}
 
+QStringList Database::loadThemes()
+{
+    QStringList themes;
 
-    // Execute query
-    bool result = this->exec(query_q, vars_q);
-    this->clear();
-    result = result && this->exec(query_q2, vars_q);
-    this->clear();
-    result = result && this->exec(query_q3, vars_q);
-    this->clear();
-    qDebug() << "suppresion question ?" << result;
-    return result;
+    // Select themes
+    if (this->exec("SELECT theme FROM Themes"))
+    {
+        while (_query->next())
+            themes << _query->value(0).toString();
+    }
+
+    return themes;
 }
 
 bool Database::deleteTheme(QString theme)
 {
-    if (theme == NULL) {
+    if (theme == NULL)
         return false;
-    }
+
     // Create vars list for prepared query
-    QVariantList vars_q;
-    vars_q << theme2id(theme);
+    QVariantList vars;
+    vars << theme;
 
-    // delete question
-    QString query_q("DELETE FROM Theme \
-                     WHERE id = ?");
-
-
-    // Execute query
-    bool result = this->exec(query_q, vars_q);
-    this->clear();
-    qDebug() << "suppresion theme ?" << result;
-    return result;
+    // Delete theme
+    return this->exec("DELETE FROM Theme WHERE theme = ?", vars);
 }
 
-int Database::theme2id(QString theme)
-{
-    QVariantList vars_t;
-    vars_t << theme;
-    int id_theme;
-    if (this->exec("SELECT id FROM Theme WHERE text=?;",vars_t)) {
-        while(_query->next()) {
-            id_theme = _query->value(0).toInt();
-        }
-        this->clear();
-    }
-    return id_theme;
-}
-
-/*--------------------------------------------------------------------*\
-        Private
-\*--------------------------------------------------------------------*/
+//--------------------------------------------------------------------
+//        Database
+//--------------------------------------------------------------------
 bool Database::open()
 {
     _error.clear();
@@ -419,7 +225,6 @@ bool Database::open()
     if ( ! _db.open())
     {
         _error = _db.lastError().text();
-        qDebug() << "failure";
         return false;
     }
 
@@ -489,16 +294,4 @@ void Database::clear()
     }
 
     _db.close();
-}
-
-int Database::findGoodAnswerPos(const QList<int>& idListAnswer, const int & id_good_answer)
-{
-    int i=0;
-    foreach(int id, idListAnswer) {
-        qDebug()<<id;
-        if (id == id_good_answer)
-            return i;
-        i++;
-    }
-    return -1;
 }

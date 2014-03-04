@@ -13,11 +13,8 @@ class ModifyQuestionWidget : public QWidget
     private:
         QLineEdit *_theme;
         QLineEdit *_question;
-        QLineEdit *_answer1;
-        QLineEdit *_answer2;
-        QLineEdit *_answer3;
-        QLineEdit *_answer4;
-        QTextEdit *_explaination;
+        QList<QLineEdit*> _answers;
+        QTextEdit *_explanation;
 
     public:
         explicit ModifyQuestionWidget(bool new_question);

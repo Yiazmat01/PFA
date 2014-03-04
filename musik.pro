@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql sfml
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,12 +16,12 @@ HEADERS += \
 	sources/ToolsWidget.h \
 	sources/QuizzWidget.h \
 	sources/NotesExploderWidget.h \
-    sources/Database.h \
-    sources/Quizz/Question.hpp \
-    sources/Quizz/Score.hpp \
-    sources/Quizz/Quizz.hpp \
-    sources/AdminQuizzWidget.h \
-    sources/ModifyQuestionWidget.h \
+	sources/Database.h \
+	sources/Quizz/Question.hpp \
+	sources/Quizz/Score.hpp \
+	sources/Quizz/Quizz.hpp \
+	sources/AdminQuizzWidget.h \
+	sources/ModifyQuestionWidget.h \
  #   sources/QSFMLCanvas.h
 
 SOURCES += \
@@ -30,13 +30,13 @@ SOURCES += \
 	sources/ToolsWidget.cpp \
 	sources/QuizzWidget.cpp \
 	sources/NotesExploderWidget.cpp \
-    sources/Database.cpp \
-    sources/Quizz/Question.cpp \
-    sources/Quizz/Score.cpp \
-    sources/Quizz/Quizz.cpp \
-    sources/Quizz/test.cpp \
-    sources/AdminQuizzWidget.cpp \
-    sources/ModifyQuestionWidget.cpp \
+	sources/Database.cpp \
+	sources/Quizz/Question.cpp \
+	sources/Quizz/Score.cpp \
+	sources/Quizz/Quizz.cpp \
+	sources/Quizz/test.cpp \
+	sources/AdminQuizzWidget.cpp \
+	sources/ModifyQuestionWidget.cpp \
 #    sources/QSFMLCanvas.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
@@ -47,4 +47,4 @@ RESOURCES += \
 TRANSLATIONS = lang/musik_fr.ts
 
 OTHER_FILES += \
-    sources/Quizz/Makefile
+	sources/Quizz/Makefile

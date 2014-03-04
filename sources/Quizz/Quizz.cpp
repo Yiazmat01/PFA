@@ -6,47 +6,43 @@
  * to the highscore table
  */
 
-namespace musik{
+Quizz::Quizz(QList<Question*> questions)
+    : _questions(questions), _current_score(Score()), _combo(0),_time(QTime()), _current_question(-1)
+{
+}
 
-Quizz::Quizz(QList<Question>): _current_score(Score()), _combo(0),_time(QTime()), _current_question(-1)
+Question* Quizz::nextQuestion()
+{
+    _time = QTime::currentTime();
+    return _questions.at(++_current_question);
+}
+
+bool Quizz::isFinished()
+{
+    return (_questions.size() -1 == _current_question);
+}
+
+void Quizz::refreshScore(int i)
+{
+    int answer_time = _time.secsTo(QTime::currentTime());
+    if (!_questions[_current_question]->isRight(i))
     {
+        _combo = 0;
+
 
     }
 
-
-    Question Quizz::nextQuestion()
-    {
-        _time = QTime::currentTime();
-        return _questions.at(++_current_question);
-    }
-
-    bool Quizz::isFinished()
-    {
-        return (_questions.size() -1 == _current_question);
-    }
-
-    void Quizz::refreshScore(int i)
-    {
-        int answer_time = _time.secsTo(QTime::currentTime());
-        if (!_questions[_current_question].isRight(i))
-        {
-            _combo = 0;
+    _current_score.add(_combo* _questions[_current_question]->difficulty() / answer_time);
+    _combo++;
+}
 
 
-        }
+int Quizz::combo()
+{
+    return _combo;
+}
 
-        _current_score.add(_combo* _questions[_current_question].difficulty() / answer_time);
-        _combo++;
-    }
-
-
-    int Quizz::combo()
-    {
-        return _combo;
-    }
-
-    QTime Quizz::time()
-    {
-        return _time;
-    }
+QTime Quizz::time()
+{
+    return _time;
 }
