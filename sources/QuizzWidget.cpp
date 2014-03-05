@@ -99,22 +99,53 @@ void QuizzWidget::buildWidget(MainWindow *main_window)
     layout->addWidget(_back_button);
 }
 
+QStringList QuizzWidget::shuffleAnswers(QStringList answers)
+{
+    int random_positions[answers.size()];
+
+    for (int i=0; i<answers.size(); i++)
+        random_positions[i] = i;
+
+    // Shuffle
+    for (int i=0; i<answers.size(); i++)
+    {
+        int j = qrand() % answers.size();
+        int tmp = random_positions[j];
+        random_positions[j] = random_positions[i];
+        random_positions[i] = tmp;
+    }
+
+    QStringList shuffled_answers;
+
+    for (int i=0; i<answers.size(); i++)
+    {
+        shuffled_answers << answers.at(random_positions[i]);
+
+        // Good answer
+        if (random_positions[i] == 0)
+            _position_correct_answer = i;
+    }
+
+    return shuffled_answers;
+}
+
 void QuizzWidget::showQuestion()
 {
     if ( ! _quizz->isFinished())
     {
-        qDebug() << "Quizz not finished";
         Question *question = _quizz->nextQuestion();
 
         // Question labels
         _question_label->setText(question->question());
+
+        QStringList answers = this->shuffleAnswers(question->answers());
 
         // Answers
         for (int i = 0; i < 4; i++)
         {
             if (i < question->nbAnswer())
             {
-                _answers_radio_buttons.at(i)->setText(question->answer(i));
+                _answers_radio_buttons.at(i)->setText(answers.at(i));
                 _answers_radio_buttons.at(i)->setCheckable(true);
                 _answers_radio_buttons.at(i)->setStyleSheet("font-weight: normal; color: #573;");
                 _answers_radio_buttons.at(i)->show();
@@ -139,14 +170,13 @@ void QuizzWidget::showQuestion()
 void QuizzWidget::answer()
 {
     // The right answer for the current question
-    int answer = 1;
     int selected_answer = -1;
 
     // Colorize good and bad answer
     for (int i = 0; i < 4; i++)
     {
         // Good answer
-        if (i == answer)
+        if (i == _position_correct_answer)
             _answers_radio_buttons.at(i)->setStyleSheet("font-weight: bold; color: #0a0;");
 
         // Bad answer and this is the one given by user
@@ -163,7 +193,7 @@ void QuizzWidget::answer()
         _answers_radio_buttons.at(i)->setCheckable(false);
 
     // Good answer
-    if (selected_answer == answer)
+    if (selected_answer == _position_correct_answer)
     {
         _explanation_label->setText("Bien joué !");
         _explanation_label->setStyleSheet("font: bold 18px; font-family: trebuchet ms; color: #0a0; margin: 0 auto;");

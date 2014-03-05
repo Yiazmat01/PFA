@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTranslator>
+#include <QTime>
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +26,10 @@ int main(int argc, char *argv[])
         translator.load(filename);
         app.installTranslator(&translator);
     }
+
+    // Seed for random functions
+    QTime midnight(0, 0, 0);
+    qsrand(midnight.secsTo(QTime::currentTime()));
 
     MainWindow window;
 

@@ -31,6 +31,7 @@ class QuizzWidget : public QWidget
         QPushButton *_back_button;
 
         Quizz *_quizz;
+        int _position_correct_answer;
 
     public:
         explicit QuizzWidget(QWidget *parent = 0);
@@ -38,6 +39,7 @@ class QuizzWidget : public QWidget
 
     private:
         void buildWidget(MainWindow *main_window);
+        QStringList shuffleAnswers(QStringList answers);
 
     private slots:
         void answer();
