@@ -9,6 +9,8 @@ class QLabel;
 class QRadioButton;
 class QVBoxLayout;
 class Quizz;
+class QTextEdit;
+class QTimer;
 
 class QuizzWidget : public QWidget
 {
@@ -20,7 +22,7 @@ class QuizzWidget : public QWidget
 
         // Question labels
         QLabel *_question_label;
-        QLabel *_explanation_label;
+        QTextEdit *_explanation_label;
 
         // Answers radio buttons
         QList<QRadioButton*> _answers_radio_buttons;
@@ -33,6 +35,12 @@ class QuizzWidget : public QWidget
         Quizz *_quizz;
         int _position_correct_answer;
 
+        QStringList _positive_comments;
+        QStringList _negative_comments;
+
+        QTimer *_timer;
+        QLabel *_time_left;
+
     public:
         explicit QuizzWidget(QWidget *parent = 0);
         ~QuizzWidget();
@@ -44,6 +52,7 @@ class QuizzWidget : public QWidget
     private slots:
         void answer();
         void showQuestion();
+        void verify_timeout();
 };
 
 #endif // QUIZZWIDGET_H

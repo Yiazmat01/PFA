@@ -48,7 +48,7 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     // Create tools buttons and back button
     QPushButton *tool1_button = new QPushButton(QIcon(":/images/tool_vlc.png"), tr("VLC"));
     QPushButton *tool2_button = new QPushButton(QIcon(":/images/tool_audacity.png"), tr("Audacity"));
-    QPushButton *tool3_button = new QPushButton(QIcon(":/images/tools.png"), tr("Metronimix"));
+    QPushButton *tool3_button = new QPushButton(QIcon(":/images/tool_metronomix.png"), tr("Metronomix"));
     QPushButton *back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
 
     connect(tool1_button, SIGNAL(clicked()), this, SLOT(launch_tool1()));
@@ -80,9 +80,9 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     layout->addWidget(back_button);
 }
 
-void ToolsWidget::launch(QString executable_name) const
+void ToolsWidget::launch(QString executable_name, QString working_directory) const
 {
-    if ( ! QProcess::startDetached(QApplication::applicationDirPath() + "/tools/" + executable_name))
+    if ( ! QProcess::startDetached(QApplication::applicationDirPath() + "/tools/" + executable_name, QStringList(), working_directory))
         QMessageBox::critical(NULL, tr("Error"), tr("Error while trying to start this tool"));
 }
 
@@ -90,7 +90,7 @@ void ToolsWidget::launch_tool1() const
 {
     // Windows
     #if defined(Q_OS_WIN32)
-        this->launch("vlc_win/vlc.exe");
+        this->launch("windows/vlc/vlc.exe", "./tools/windows/vlc/");
 
     // Unix
     #elif defined(Q_OS_LINUX)
@@ -110,7 +110,7 @@ void ToolsWidget::launch_tool2() const
 {
     // Windows
     #if defined(Q_OS_WIN32)
-        this->launch("audacity_win/audacity.exe");
+        this->launch("windows/audacity/audacity.exe", "./tools/windows/audacity/");
 
     // Unix
     #elif defined(Q_OS_LINUX)
@@ -130,15 +130,15 @@ void ToolsWidget::launch_tool3() const
 {
     // Windows
     #if defined(Q_OS_WIN32)
-        this->launch("audacity_win/audacity.exe");
+        this->launch("windows/metronomix/metronomix.exe", "./tools/windows/metronomix/");
 
     // Unix
     #elif defined(Q_OS_LINUX)
-        this->launch("audacity");
+        this->launch("metronomix");
 
     // Mac
     #elif defined(Q_OS_MAC)
-        this->launch("audacity");
+        this->launch("metronomix");
 
     // Others operating systems
     #else

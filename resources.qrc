@@ -9,5 +9,6 @@
         <file>images/backward.png</file>
         <file>images/next.png</file>
         <file>images/validate.png</file>
+        <file>images/tool_metronomix.png</file>
     </qresource>
 </RCC>

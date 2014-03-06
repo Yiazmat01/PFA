@@ -17,14 +17,13 @@ HEADERS += \
 	sources/QuizzWidget.h \
 	sources/NotesExploderWidget.h \
 	sources/Database.h \
-	sources/Quizz/Question.hpp \
-	sources/Quizz/Score.hpp \
-	sources/Quizz/Quizz.hpp \
-	sources/AdminQuizzWidget.h \
-	sources/ModifyQuestionWidget.h \
- #   sources/QSFMLCanvas.h
-	sources/ModifyThemeWidget.h \
-	sources/ModifyCommentWidget.h
+        sources/quizz/Question.hpp \
+        sources/quizz/Score.hpp \
+        sources/quizz/Quizz.hpp \
+        sources/administration/AdminQuizzWidget.h \
+        sources/administration/ModifyQuestionWidget.h \
+        sources/administration/ModifyThemeWidget.h \
+        sources/administration/ModifyCommentWidget.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -33,15 +32,13 @@ SOURCES += \
 	sources/QuizzWidget.cpp \
 	sources/NotesExploderWidget.cpp \
 	sources/Database.cpp \
-	sources/Quizz/Question.cpp \
-	sources/Quizz/Score.cpp \
-	sources/Quizz/Quizz.cpp \
-	sources/Quizz/test.cpp \
-	sources/AdminQuizzWidget.cpp \
-	sources/ModifyQuestionWidget.cpp \
-#    sources/QSFMLCanvas.cpp
-	sources/ModifyThemeWidget.cpp \
-	sources/ModifyCommentWidget.cpp
+        sources/quizz/Question.cpp \
+        sources/quizz/Score.cpp \
+        sources/quizz/Quizz.cpp \
+        sources/administration/AdminQuizzWidget.cpp \
+        sources/administration/ModifyQuestionWidget.cpp \
+        sources/administration/ModifyThemeWidget.cpp \
+        sources/administration/ModifyCommentWidget.cpp
 
 #LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
@@ -50,5 +47,4 @@ RESOURCES += \
 
 TRANSLATIONS = lang/musik_fr.ts
 
-OTHER_FILES += \
-	sources/Quizz/Makefile
+OTHER_FILES +=

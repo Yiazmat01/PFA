@@ -11,8 +11,8 @@ class Score
 
   public:
     Score();
-    int score();
-    QString name();
+    int score() const;
+    QString name() const;
     void setName(QString);
     void add(int);
 

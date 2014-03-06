@@ -1,24 +1,22 @@
 #include "Score.hpp"
 
-
 Score::Score(): _score(0)
 {
-
 }
 
-int Score::score()
+int Score::score() const
 {
-        return _score;
+    return _score;
 }
 
-QString Score::name()
+QString Score::name() const
 {
-        return _name;
+    return _name;
 }
 
 void Score::setName(QString newname)
 {
-        _name = newname;
+    _name = newname;
 }
 
 void Score::add(int i)

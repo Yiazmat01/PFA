@@ -15,7 +15,7 @@ class ToolsWidget : public QWidget
 
     private:
         void buildWidget(MainWindow *main_window);
-        void launch(QString executable_name) const;
+        void launch(QString executable_name, QString working_directory = ".") const;
 
     private slots:
         void launch_tool1() const;

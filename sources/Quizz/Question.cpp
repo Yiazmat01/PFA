@@ -6,11 +6,6 @@ Question::Question(int id, QString question, QStringList &answers, QString expla
 {
 }
 
-bool Question::isRight(int i) const
-{
-    return i == 0;
-}
-
 QString Question::explanation() const
 {
     return _explanation;
@@ -59,17 +54,6 @@ void Question::set_id(int i)
 int Question::id() const
 {
   return _id;
-}
-
-void Question::debug() const
-{
-  qDebug() << endl
-           << "id :"<< _id << endl
-           << "question :"<< _question << endl
-           << "answer :"<< _answers << endl
-           << "explanation :"<< _explanation << endl
-           << "id_theme :"<< _id_theme << endl
-           << "year :"<< _year << endl;
 }
 
 void Question::set_question(QString s)

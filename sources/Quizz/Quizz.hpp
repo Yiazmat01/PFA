@@ -17,10 +17,13 @@ class Quizz
     public:
         Quizz(QList<Question*>);
         Question* nextQuestion();
+        Question* currentQuestion();
         bool isFinished();
-        void refreshScore(int); // the argument of refreshScore is the number of the answer that has been chosen
-        int combo();
-        QTime time();
+        void refreshScore(bool); // true if good answer
+        int combo() const;
+        int score() const;
+        int timeLeft() const;
+        bool timeOut() const;
 
 };
 

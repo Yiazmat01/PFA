@@ -3,7 +3,7 @@
 #include "QuizzWidget.h"
 #include "ToolsWidget.h"
 #include "Database.h"
-#include "AdminQuizzWidget.h"
+#include "administration/AdminQuizzWidget.h"
 
 #include <QMenu>
 #include <QMenuBar>

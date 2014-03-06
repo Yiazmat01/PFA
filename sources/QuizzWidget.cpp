@@ -1,8 +1,8 @@
 #include "QuizzWidget.h"
 #include "MainWindow.h"
-#include "Quizz/Quizz.hpp"
+#include "quizz/Quizz.hpp"
 #include "Database.h"
-#include "Quizz/Question.hpp"
+#include "quizz/Question.hpp"
 
 #include <QDebug>
 #include <QVBoxLayout>
@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QMessageBox>
+#include <QTextEdit>
+#include <QTimer>
 
 QuizzWidget::QuizzWidget(QWidget *parent) :
     QWidget(parent)
@@ -19,7 +21,20 @@ QuizzWidget::QuizzWidget(QWidget *parent) :
     QList<Question*> questions = db->loadQuestions();
     _quizz = new Quizz(questions);
 
+    _positive_comments = db->loadComments(true);
+    _negative_comments = db->loadComments(false);
+
+    if (_positive_comments.size() == 0)
+        _positive_comments << tr("Good answer!");
+
+    if (_negative_comments.size() == 0)
+        _negative_comments << tr("Bad answer!");
+
     this->buildWidget(dynamic_cast<MainWindow*>(parent));
+
+    _timer = new QTimer(this);
+    connect(_timer, SIGNAL(timeout()), this, SLOT(verify_timeout()));
+
     this->showQuestion();
 }
 
@@ -50,7 +65,11 @@ void QuizzWidget::buildWidget(MainWindow *main_window)
     _question_label = new QLabel;
     _question_label->setStyleSheet("font: bold 15px; font-family: trebuchet ms; color: #573; margin: 0 auto;");
 
-    _explanation_label = new QLabel;
+    _time_left = new QLabel;
+    _time_left->setStyleSheet("font: bold 16px; font-family: trebuchet ms; color: #597;");
+
+    _explanation_label = new QTextEdit;
+    _explanation_label->setDisabled(true);
 
     // Answers radio buttons
     for (int i = 0; i < 4; i++)
@@ -94,10 +113,25 @@ void QuizzWidget::buildWidget(MainWindow *main_window)
     _question_layout->setAlignment(Qt::AlignHCenter);
 
     // Add widgets
+    QHBoxLayout *title_layout = new QHBoxLayout;
+    title_layout->addWidget(title_label);
+    title_layout->addWidget(_time_left);
+
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(title_label);
+    layout->addLayout(title_layout);
     layout->addLayout(_question_layout);
     layout->addWidget(_back_button);
+}
+
+void QuizzWidget::verify_timeout()
+{
+    // If time is over
+    if (_quizz->timeOut())
+        this->answer();
+
+    // Else, we show time left
+    else
+        _time_left->setText("00:" + QString::number(_quizz->timeLeft()));
 }
 
 QStringList QuizzWidget::shuffleAnswers(QStringList answers)
@@ -162,16 +196,20 @@ void QuizzWidget::showQuestion()
         // Control buttons
         _answer_button->setVisible(true);
         _next_question_button->setVisible(false);
+        _timer->start(500);
     }
 
     else
     {
-        QMessageBox::information(this, tr("Quizz finished!"), tr("Quizz is over!"));
+        QString score = tr("Your score is: ") + QString::number(_quizz->score());
+        QMessageBox::information(this, tr("Quizz finished!"), tr("Quizz is over! ") + score);
     }
 }
 
 void QuizzWidget::answer()
 {
+    _timer->stop();
+
     // The right answer for the current question
     int selected_answer = -1;
 
@@ -198,18 +236,23 @@ void QuizzWidget::answer()
     // Good answer
     if (selected_answer == _position_correct_answer)
     {
-        _explanation_label->setText("Bien joué !");
-        _explanation_label->setStyleSheet("font: bold 18px; font-family: trebuchet ms; color: #0a0; margin: 0 auto;");
+        _explanation_label->setText(_positive_comments.at(qrand() % _positive_comments.size()));
+        _explanation_label->setStyleSheet("font: bold 14px; font-family: trebuchet ms; color: #0a0; margin: 0 auto;");
     }
 
     // Bad answer
     else
     {
-        _explanation_label->setText("Trop mauvais...");
-        _explanation_label->setStyleSheet("font: bold 18px; font-family: trebuchet ms; color: #f00; margin: 0 auto;");
+        _explanation_label->setText(_negative_comments.at(qrand() % _negative_comments.size()));
+        _explanation_label->setStyleSheet("font: bold 14px; font-family: trebuchet ms; color: #f00; margin: 0 auto;");
     }
 
+    _quizz->refreshScore(selected_answer == _position_correct_answer);
+
+    // Show explanation
+    _explanation_label->setHtml(_explanation_label->toHtml() + "<br>" + _quizz->currentQuestion()->explanation());
     _explanation_label->setVisible(true);
+    _explanation_label->setFixedHeight(_explanation_label->document()->size().height());
 
     // Control buttons
     _answer_button->setVisible(false);

@@ -1,6 +1,6 @@
-#include "ModifyCommentWidget.h"
-#include "Database.h"
-#include "Quizz/Question.hpp"
+#include "ModifyThemeWidget.h"
+#include "../Database.h"
+#include "../quizz/Question.hpp"
 #include "AdminQuizzWidget.h"
 
 #include <QDebug>
@@ -11,10 +11,10 @@
 #include <QLineEdit>
 #include <QDesktopWidget>
 
-ModifyCommentWidget::ModifyCommentWidget(bool new_comment, bool is_positive, QWidget *caller)
-    : _is_positive(is_positive), _caller(caller)
+ModifyThemeWidget::ModifyThemeWidget(bool new_theme, QWidget *caller)
+    : _caller(caller)
 {
-    this->buildWidget(new_comment);
+    this->buildWidget(new_theme);
     this->setWindowModality(Qt::ApplicationModal);
     this->resize(400, 200);
 
@@ -28,14 +28,14 @@ ModifyCommentWidget::ModifyCommentWidget(bool new_comment, bool is_positive, QWi
     this->show();
 }
 
-ModifyCommentWidget::~ModifyCommentWidget()
+ModifyThemeWidget::~ModifyThemeWidget()
 {
     #ifndef QT_NO_DEBUG
-        qDebug() << "~ModifyCommentWidget()";
+        qDebug() << "~ModifyThemeWidget()";
     #endif
 }
 
-void ModifyCommentWidget::buildWidget(bool new_comment)
+void ModifyThemeWidget::buildWidget(bool new_theme)
 {
     #define MUSIK_BUTTON_STYLE "QPushButton img { width:200%; } QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
                                "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00aaf2, stop: 1 #005676);" \
@@ -47,26 +47,15 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
     // Create label for title
     QLabel *title_label;
 
-    if (new_comment)
-    {
-        if (_is_positive)
-            title_label = new QLabel(tr("New good comment"));
-        else
-            title_label = new QLabel(tr("New bad comment"));
-    }
+    if (new_theme)
+        title_label = new QLabel(tr("New theme"));
     else
-    {
-        if (_is_positive)
-            title_label = new QLabel(tr("Modify good comment"));
-
-        else
-            title_label = new QLabel(tr("Modify bad comment"));
-    }
+        title_label = new QLabel(tr("Modify theme"));
 
     title_label->setStyleSheet(MUSIK_LABEL_STYLE);
 
     // Create form
-    _comment = new QLineEdit;
+    _theme = new QLineEdit;
 
     // Create validate and cancel buttons
     QPushButton *add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
@@ -83,8 +72,8 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
     // Add widgets
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(title_label);
-    layout->addWidget(new QLabel(tr("Comment")));
-    layout->addWidget(_comment);
+    layout->addWidget(new QLabel(tr("Theme")));
+    layout->addWidget(_theme);
 
     // Buttons layout
     QHBoxLayout *buttons_layout = new QHBoxLayout;
@@ -93,10 +82,10 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
     layout->addLayout(buttons_layout);
 }
 
-void ModifyCommentWidget::save()
+void ModifyThemeWidget::save()
 {
     Database db;
-    db.insertComment(_comment->text(), _is_positive);
+    db.insertTheme(_theme->text());
     dynamic_cast<AdminQuizzWidget*>(_caller)->reloadTab();
     this->close();
 }

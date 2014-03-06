@@ -21,7 +21,6 @@ class Question
 
     public:
         Question(int id, QString question, QStringList &answers, QString explanation, int difficulty, int year, int id_theme);
-        bool isRight(int) const;
         QString explanation() const;
         QStringList answers() const;
         QString answer(int i) const;
@@ -31,7 +30,6 @@ class Question
         int theme() const;
         int year() const;
         int id() const;
-        void debug() const;
 
         void set_question(QString);
         void set_explanation(QString);
