@@ -173,6 +173,22 @@ bool Database::deleteQuestion(Question *question)
 //--------------------------------------------------------------------
 //        Themes
 //--------------------------------------------------------------------
+int Database::theme_id(QString theme)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << theme;
+
+    // Select themes
+    if (this->exec("SELECT id FROM themes WHERE theme = ?", vars))
+    {
+        _query->next();
+        return _query->value(0).toInt();
+    }
+
+    return 0;
+}
+
 bool Database::insertTheme(QString theme)
 {
     // Create vars list for prepared query
@@ -188,7 +204,7 @@ QStringList Database::loadThemes()
     QStringList themes;
 
     // Select themes
-    if (this->exec("SELECT theme FROM Themes"))
+    if (this->exec("SELECT theme FROM Themes ORDER BY theme"))
     {
         while (_query->next())
             themes << _query->value(0).toString();
@@ -207,7 +223,51 @@ bool Database::deleteTheme(QString theme)
     vars << theme;
 
     // Delete theme
-    return this->exec("DELETE FROM Theme WHERE theme = ?", vars);
+    return this->exec("DELETE FROM Themes WHERE theme = ?", vars);
+}
+
+//--------------------------------------------------------------------
+//        Comments
+//--------------------------------------------------------------------
+bool Database::insertComment(QString comment, bool is_positive)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << comment << is_positive;
+
+    // Insert comment
+    return this->exec("INSERT INTO Comments(comment, is_positive) VALUES(?, ?)", vars);
+}
+
+QStringList Database::loadComments(bool positive)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << positive;
+
+    QStringList comments;
+
+    // Select themes
+    if (this->exec("SELECT comment FROM Comments WHERE is_positive = ? ORDER BY comment", vars))
+    {
+        while (_query->next())
+            comments << _query->value(0).toString();
+    }
+
+    return comments;
+}
+
+bool Database::deleteComment(QString comment)
+{
+    if (comment == NULL)
+        return false;
+
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << comment;
+
+    // Delete comment
+    return this->exec("DELETE FROM Comments WHERE comment = ?", vars);
 }
 
 //--------------------------------------------------------------------
@@ -286,7 +346,7 @@ void Database::clear()
     {
         // Clear and finish query
         _query->finish();
-        _query->clear();
+        //_query->clear();
 
         // Delete query and set it to NULL for further comparaisons
         delete _query;

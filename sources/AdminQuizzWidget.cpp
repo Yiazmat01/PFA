@@ -3,6 +3,8 @@
 #include "Quizz/Question.hpp"
 #include "Database.h"
 #include "ModifyQuestionWidget.h"
+#include "ModifyThemeWidget.h"
+#include "ModifyCommentWidget.h"
 
 #include <QDebug>
 #include <QTabWidget>
@@ -52,30 +54,44 @@ void AdminQuizzWidget::buildWidget(MainWindow *main_window)
 
     // Create questions widget
     QWidget *admin_questions = new QWidget;
-    QVBoxLayout *admin_questions_layout = new QVBoxLayout;
+    _admin_questions_layout = new QVBoxLayout;
     QPushButton *add_question_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add new question"));
 
     connect(add_question_button, SIGNAL(clicked()), this, SLOT(new_question()));
 
-    admin_questions->setLayout(admin_questions_layout);
-    admin_questions_layout->addWidget(add_question_button);
-    admin_questions_layout->addWidget(_scroll_area);
+    admin_questions->setLayout(_admin_questions_layout);
+    _admin_questions_layout->addWidget(add_question_button);
+    _admin_questions_layout->addWidget(_scroll_area);
+
+    // Create themes widget
+    QWidget *admin_themes = new QWidget;
+    _admin_themes_layout = new QVBoxLayout;
+    QPushButton *add_theme_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add new theme"));
+
+    connect(add_theme_button, SIGNAL(clicked()), this, SLOT(new_theme()));
+
+    admin_themes->setLayout(_admin_themes_layout);
+    _admin_themes_layout->addWidget(add_theme_button);
 
     // Create good answers widget
     QWidget *admin_good_answers = new QWidget;
-    QVBoxLayout *admin_good_answers_layout = new QVBoxLayout;
+    _admin_good_answers_layout = new QVBoxLayout;
     QPushButton *add_good_answer_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add new good answer"));
 
-    admin_good_answers->setLayout(admin_good_answers_layout);
-    admin_good_answers_layout->addWidget(add_good_answer_button);
+    connect(add_good_answer_button, SIGNAL(clicked()), this, SLOT(new_good_comment()));
+
+    admin_good_answers->setLayout(_admin_good_answers_layout);
+    _admin_good_answers_layout->addWidget(add_good_answer_button);
 
     // Create bad answers widget
     QWidget *admin_bad_answers = new QWidget;
-    QVBoxLayout *admin_bad_answers_layout = new QVBoxLayout;
+    _admin_bad_answers_layout = new QVBoxLayout;
     QPushButton *add_bad_answer_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add new bad answer"));
 
-    admin_bad_answers->setLayout(admin_bad_answers_layout);
-    admin_bad_answers_layout->addWidget(add_bad_answer_button);
+    connect(add_bad_answer_button, SIGNAL(clicked()), this, SLOT(new_bad_comment()));
+
+    admin_bad_answers->setLayout(_admin_bad_answers_layout);
+    _admin_bad_answers_layout->addWidget(add_bad_answer_button);
 
     // Create back button
     QPushButton *back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
@@ -88,6 +104,7 @@ void AdminQuizzWidget::buildWidget(MainWindow *main_window)
 
     // Add widgets to tab widget
     tab_widget->addTab(admin_questions, tr("Questions/Answers"));
+    tab_widget->addTab(admin_themes, tr("Themes"));
     tab_widget->addTab(admin_good_answers, tr("Good answers"));
     tab_widget->addTab(admin_bad_answers, tr("Bad answers"));
 
@@ -97,24 +114,110 @@ void AdminQuizzWidget::buildWidget(MainWindow *main_window)
     layout->addWidget(tab_widget);
     layout->addWidget(back_button);
 }
+
 void AdminQuizzWidget::new_question()
 {
-    new ModifyQuestionWidget(true);
+    new ModifyQuestionWidget(true, NULL, this);
+}
+
+void AdminQuizzWidget::new_theme()
+{
+    new ModifyThemeWidget(true, this);
+}
+
+void AdminQuizzWidget::new_good_comment()
+{
+    new ModifyCommentWidget(true, true, this);
+}
+
+void AdminQuizzWidget::new_bad_comment()
+{
+    new ModifyCommentWidget(true, false, this);
+}
+
+void AdminQuizzWidget::modify_item()
+{
+    QObject *sender = QObject::sender();
+    int selected = _buttons_links[sender];
+    Database db;
+
+    // Questions
+    if (_position_current_widget == 0)
+    {
+        QList<Question*> questions = db.loadQuestions();
+        Question *question = questions.at(selected);
+
+        //new ModifyQuestionWidget(false, question);
+    }
+
+    // Themes
+    else if (_position_current_widget == 1)
+    {
+
+    }
+
+    // Comments
+    else if (_position_current_widget == 2 || _position_current_widget == 3)
+    {
+
+    }
+}
+
+void AdminQuizzWidget::delete_item()
+{
+    QObject *sender = QObject::sender();
+    int selected = _buttons_links[sender];
+    Database db;
+
+    // Questions
+    if (_position_current_widget == 0)
+    {
+        QList<Question*> questions = db.loadQuestions();
+        Question *question = questions.at(selected);
+        db.deleteQuestion(question);
+    }
+
+    // Themes
+    else if (_position_current_widget == 1)
+    {
+        QStringList themes = db.loadThemes();
+        QString theme = themes.at(selected);
+        db.deleteTheme(theme);
+    }
+
+    // Comments
+    else if (_position_current_widget == 2 || _position_current_widget == 3)
+    {
+        QStringList comments = db.loadComments(_position_current_widget == 2);
+        QString comment = comments.at(selected);
+        db.deleteComment(comment);
+    }
+
+    this->reloadTab();
+}
+
+void AdminQuizzWidget::reloadTab()
+{
+    this->switchWidget(_position_current_widget);
 }
 
 void AdminQuizzWidget::switchWidget(int index)
 {
+    _position_current_widget = index;
+    Database db;
+
+    while (_grid_layout->count() > 0)
+    {
+        QLayoutItem* item = _grid_layout->takeAt(0);
+        delete item->widget();
+    }
+
+    _buttons_links.clear();
+
     // Questions
     if (index == 0)
     {
-        Database db;
         QList<Question*> questions = db.loadQuestions();
-
-        while (_grid_layout->count() > 0)
-        {
-            QLayoutItem* item = _grid_layout->takeAt(0);
-            delete item->widget();
-        }
 
         for (int i = 0; i < questions.size(); i++)
         {
@@ -122,20 +225,71 @@ void AdminQuizzWidget::switchWidget(int index)
             QPushButton *modify_button = new QPushButton(tr("Modify"));
             QPushButton *delete_button = new QPushButton(tr("Delete"));
 
+            connect(modify_button, SIGNAL(clicked()), this, SLOT(modify_item()));
+            connect(delete_button, SIGNAL(clicked()), this, SLOT(delete_item()));
+
+            _buttons_links.insert(modify_button, i);
+            _buttons_links.insert(delete_button, i);
+
             _grid_layout->addWidget(label, i, 0);
             _grid_layout->addWidget(modify_button, i, 1);
             _grid_layout->addWidget(delete_button, i, 2);
         }
+
+        _admin_questions_layout->addWidget(_scroll_area);
     }
 
-    // Good answers
+    // Themes
     else if (index == 1)
     {
+        QStringList themes = db.loadThemes();
 
+        for (int i = 0; i < themes.size(); i++)
+        {
+            QLabel *label = new QLabel(themes.at(i));
+            QPushButton *modify_button = new QPushButton(tr("Modify"));
+            QPushButton *delete_button = new QPushButton(tr("Delete"));
+
+            connect(modify_button, SIGNAL(clicked()), this, SLOT(modify_item()));
+            connect(delete_button, SIGNAL(clicked()), this, SLOT(delete_item()));
+
+            _buttons_links.insert(modify_button, i);
+            _buttons_links.insert(delete_button, i);
+
+            _grid_layout->addWidget(label, i, 0);
+            _grid_layout->addWidget(modify_button, i, 1);
+            _grid_layout->addWidget(delete_button, i, 2);
+        }
+
+        _admin_themes_layout->addWidget(_scroll_area);
     }
 
-    // Bad answers
-    else if (index == 2)
+    // Good/Bad answers
+    else if (index == 2 || index == 3)
     {
+        // Index == 2 => good answers
+        QStringList comments = db.loadComments(index == 2);
+
+        for (int i = 0; i < comments.size(); i++)
+        {
+            QLabel *label = new QLabel(comments.at(i));
+            QPushButton *modify_button = new QPushButton(tr("Modify"));
+            QPushButton *delete_button = new QPushButton(tr("Delete"));
+
+            connect(modify_button, SIGNAL(clicked()), this, SLOT(modify_item()));
+            connect(delete_button, SIGNAL(clicked()), this, SLOT(delete_item()));
+
+            _buttons_links.insert(modify_button, i);
+            _buttons_links.insert(delete_button, i);
+
+            _grid_layout->addWidget(label, i, 0);
+            _grid_layout->addWidget(modify_button, i, 1);
+            _grid_layout->addWidget(delete_button, i, 2);
+        }
+
+        if (index == 2)
+            _admin_good_answers_layout->addWidget(_scroll_area);
+        else
+            _admin_bad_answers_layout->addWidget(_scroll_area);
     }
 }

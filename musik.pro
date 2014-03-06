@@ -23,6 +23,8 @@ HEADERS += \
 	sources/AdminQuizzWidget.h \
 	sources/ModifyQuestionWidget.h \
  #   sources/QSFMLCanvas.h
+	sources/ModifyThemeWidget.h \
+    sources/ModifyCommentWidget.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -38,6 +40,8 @@ SOURCES += \
 	sources/AdminQuizzWidget.cpp \
 	sources/ModifyQuestionWidget.cpp \
 #    sources/QSFMLCanvas.cpp
+	sources/ModifyThemeWidget.cpp \
+    sources/ModifyCommentWidget.cpp
 
 LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 

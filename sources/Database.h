@@ -52,9 +52,15 @@ class Database
         bool deleteQuestion(Question * question);
 
         // Themes
+        int theme_id(QString theme);
         bool insertTheme(QString theme);
         QStringList loadThemes();
         bool deleteTheme(QString theme);
+
+        // Comments
+        bool insertComment(QString comment, bool is_positive);
+        QStringList loadComments(bool positive);
+        bool deleteComment(QString comment);
 
     private:
         // Database
