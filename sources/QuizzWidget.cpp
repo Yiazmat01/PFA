@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QMessageBox>
 
 QuizzWidget::QuizzWidget(QWidget *parent) :
     QWidget(parent)
@@ -164,7 +165,9 @@ void QuizzWidget::showQuestion()
     }
 
     else
-        qDebug() << "Quizz finished";
+    {
+        QMessageBox::information(this, tr("Quizz finished!"), tr("Quizz is over!"));
+    }
 }
 
 void QuizzWidget::answer()
