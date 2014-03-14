@@ -1,5 +1,5 @@
 #include "Database.h"
-#include "Quizz/Question.hpp"
+#include "quizz/Question.hpp"
 
 #include <QDebug>
 #include <QSqlError>

@@ -28,7 +28,7 @@
 
 #include <QSqlDatabase>
 #include <QVariant>
-#include "Quizz/Question.hpp"
+#include "quizz/Question.hpp"
 
 class Film;
 class Utils;

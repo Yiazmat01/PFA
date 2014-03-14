@@ -2,6 +2,7 @@
 #define ADMINQUIZZWIDGET_H
 
 #include <QWidget>
+#include <QHash>
 
 class MainWindow;
 class QGridLayout;
