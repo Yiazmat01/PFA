@@ -46,21 +46,21 @@ class Database
         ~Database();
 
         // Questions
-        bool insertQuestion(Question *question);
+        void insertQuestion(Question *question);
         QList<Question*> loadQuestions();
-        bool updateQuestion(Question * question);
-        bool deleteQuestion(Question * question);
+        void updateQuestion(Question * question);
+        void deleteQuestion(Question * question);
 
         // Themes
         int theme_id(QString theme);
-        bool insertTheme(QString theme);
+        void insertTheme(QString theme);
         QStringList loadThemes();
-        bool deleteTheme(QString theme);
+        void deleteTheme(QString theme);
 
         // Comments
-        bool insertComment(QString comment, bool is_positive);
+        void insertComment(QString comment, bool is_positive);
         QStringList loadComments(bool positive);
-        bool deleteComment(QString comment);
+        void deleteComment(QString comment);
 
     private:
         // Database

@@ -72,9 +72,11 @@ void Database::create()
     {
         if ( ! this->exec(query))
         {
+            this->clear();
             result = false;
             break;
         }
+        this->clear();
     }
 
     if ( ! result)
@@ -84,17 +86,21 @@ void Database::create()
 //--------------------------------------------------------------------
 //        Questions
 //--------------------------------------------------------------------
-bool Database::insertQuestion(Question *question)
+void Database::insertQuestion(Question *question)
 {
     // Insert question
     QVariantList vars;
     vars << question->question() << question->explanation() << question->difficulty() << question->year() << question->nbAnswer() << question->theme();
 
     if ( ! this->exec("INSERT INTO Questions(question, explanation, difficulty, year, nb_answers, id_theme) VALUES(?, ?, ?, ?, ?, ?)", vars))
-        return false;
+    {
+        this->clear();
+        return ;
+    }
 
     // Get question id
     question->set_id(_query->lastInsertId().toInt());
+    this->clear();
 
     // Insert answers (first one is the good answer)
     for (int i = 0; i < question->nbAnswer(); i++)
@@ -103,10 +109,12 @@ bool Database::insertQuestion(Question *question)
         vars << question->answer(i) << question->id();
 
         if ( ! (this->exec("INSERT INTO Answers(answer, id_question) VALUES(?, ?)", vars)))
-             return false;
+        {
+            this->clear();
+            return;
+        }
+        this->clear();
     }
-
-    return true;
 }
 
 QList<Question*> Database::loadQuestions()
@@ -147,27 +155,33 @@ QList<Question*> Database::loadQuestions()
             nb_answers_max = 0;
         }
     }
-
+    this->clear();
     return questions;
 }
 
-bool Database::updateQuestion(Question *question)
+void Database::updateQuestion(Question *question)
 {
-    return (question != NULL) && this->deleteQuestion(question) && this->insertQuestion(question);
+    if (question != NULL)
+    {
+        this->deleteQuestion(question);
+        this->insertQuestion(question);
+    }
 }
 
-bool Database::deleteQuestion(Question *question)
+void Database::deleteQuestion(Question *question)
 {
     if (question == NULL)
-        return false;
+        return;
 
     // Create vars list for prepared query
     QVariantList vars;
     vars << question->id();
 
     // Delete question
-    return this->exec("DELETE FROM Questions WHERE id = ?", vars) &&
-           this->exec("DELETE FROM Answers WHERE id_question = ?", vars);
+    this->exec("DELETE FROM Questions WHERE id = ?", vars);
+    this->clear();
+    this->exec("DELETE FROM Answers WHERE id_question = ?", vars);
+    this->clear();
 }
 
 //--------------------------------------------------------------------
@@ -178,25 +192,28 @@ int Database::theme_id(QString theme)
     // Create vars list for prepared query
     QVariantList vars;
     vars << theme;
+    int theme_id = 0;
 
     // Select themes
     if (this->exec("SELECT id FROM themes WHERE theme = ?", vars))
     {
         _query->next();
-        return _query->value(0).toInt();
+        theme_id = _query->value(0).toInt();
     }
 
-    return 0;
+    this->clear();
+    return theme_id;
 }
 
-bool Database::insertTheme(QString theme)
+void Database::insertTheme(QString theme)
 {
     // Create vars list for prepared query
     QVariantList vars;
     vars << theme;
 
     // Insert theme
-    return this->exec("INSERT INTO Themes(theme) VALUES(?)", vars);
+    this->exec("INSERT INTO Themes(theme) VALUES(?)", vars);
+    this->clear();
 }
 
 QStringList Database::loadThemes()
@@ -209,34 +226,37 @@ QStringList Database::loadThemes()
         while (_query->next())
             themes << _query->value(0).toString();
     }
-
+    this->clear();
     return themes;
 }
 
-bool Database::deleteTheme(QString theme)
+void Database::deleteTheme(QString theme)
 {
     if (theme == NULL)
-        return false;
+        return;
 
     // Create vars list for prepared query
     QVariantList vars;
     vars << theme;
 
     // Delete theme
-    return this->exec("DELETE FROM Themes WHERE theme = ?", vars);
+    this->exec("DELETE FROM Themes WHERE theme = ?", vars);
+    this->clear();
+
 }
 
 //--------------------------------------------------------------------
 //        Comments
 //--------------------------------------------------------------------
-bool Database::insertComment(QString comment, bool is_positive)
+void Database::insertComment(QString comment, bool is_positive)
 {
     // Create vars list for prepared query
     QVariantList vars;
     vars << comment << is_positive;
 
     // Insert comment
-    return this->exec("INSERT INTO Comments(comment, is_positive) VALUES(?, ?)", vars);
+    this->exec("INSERT INTO Comments(comment, is_positive) VALUES(?, ?)", vars);
+    this->clear();
 }
 
 QStringList Database::loadComments(bool positive)
@@ -253,21 +273,22 @@ QStringList Database::loadComments(bool positive)
         while (_query->next())
             comments << _query->value(0).toString();
     }
-
+    this->clear();
     return comments;
 }
 
-bool Database::deleteComment(QString comment)
+void Database::deleteComment(QString comment)
 {
     if (comment == NULL)
-        return false;
+        return ;
 
     // Create vars list for prepared query
     QVariantList vars;
     vars << comment;
 
     // Delete comment
-    return this->exec("DELETE FROM Comments WHERE comment = ?", vars);
+    this->exec("DELETE FROM Comments WHERE comment = ?", vars);
+    this->clear();
 }
 
 //--------------------------------------------------------------------
@@ -346,7 +367,7 @@ void Database::clear()
     {
         // Clear and finish query
         _query->finish();
-        //_query->clear();
+        _query->clear();
 
         // Delete query and set it to NULL for further comparaisons
         delete _query;
