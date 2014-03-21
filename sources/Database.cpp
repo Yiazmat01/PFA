@@ -60,9 +60,9 @@ void Database::create()
                ")";
 
     queries << "CREATE TABLE IF NOT EXISTS Comments("
-               "    id INTEGER,"
+               "    id          INTEGER PRIMARY KEY AUTOINCREMENT,"
                "    is_positive INTEGER(1),"
-               "    comment TEXT"
+               "    comment     TEXT"
                ")";
 
     bool result = true;
@@ -195,7 +195,7 @@ int Database::theme_id(QString theme)
     int theme_id = 0;
 
     // Select themes
-    if (this->exec("SELECT id FROM themes WHERE theme = ?", vars))
+    if (this->exec("SELECT id FROM Themes WHERE theme = ?", vars))
     {
         _query->next();
         theme_id = _query->value(0).toInt();
@@ -213,6 +213,17 @@ void Database::insertTheme(QString theme)
 
     // Insert theme
     this->exec("INSERT INTO Themes(theme) VALUES(?)", vars);
+    this->clear();
+}
+
+void Database::updateTheme(int theme_id, QString theme)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << theme << theme_id;
+
+    // Update theme
+    this->exec("UPDATE Themes SET theme = ? WHERE id = ?", vars);
     this->clear();
 }
 
@@ -248,6 +259,24 @@ void Database::deleteTheme(QString theme)
 //--------------------------------------------------------------------
 //        Comments
 //--------------------------------------------------------------------
+int Database::comment_id(bool positive, QString comment)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << positive << comment;
+    int comment_id = 0;
+
+    // Select comment
+    if (this->exec("SELECT id FROM Comments WHERE is_positive = ? AND comment = ?", vars))
+    {
+        _query->next();
+        comment_id = _query->value(0).toInt();
+    }
+
+    this->clear();
+    return comment_id;
+}
+
 void Database::insertComment(QString comment, bool is_positive)
 {
     // Create vars list for prepared query
@@ -273,8 +302,20 @@ QStringList Database::loadComments(bool positive)
         while (_query->next())
             comments << _query->value(0).toString();
     }
+
     this->clear();
     return comments;
+}
+
+void Database::updateComment(int comment_id, bool positive, QString comment)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << comment << positive << comment_id;
+
+    // Update theme
+    this->exec("UPDATE Comments SET comment = ? WHERE is_positive = ? AND id = ?", vars);
+    this->clear();
 }
 
 void Database::deleteComment(QString comment)

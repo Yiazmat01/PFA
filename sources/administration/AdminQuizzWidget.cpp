@@ -122,17 +122,17 @@ void AdminQuizzWidget::new_question()
 
 void AdminQuizzWidget::new_theme()
 {
-    new ModifyThemeWidget(true, this);
+    new ModifyThemeWidget(true, "", this);
 }
 
 void AdminQuizzWidget::new_good_comment()
 {
-    new ModifyCommentWidget(true, true, this);
+    new ModifyCommentWidget(true, true, "", this);
 }
 
 void AdminQuizzWidget::new_bad_comment()
 {
-    new ModifyCommentWidget(true, false, this);
+    new ModifyCommentWidget(true, false, "", this);
 }
 
 void AdminQuizzWidget::modify_item()
@@ -145,7 +145,7 @@ void AdminQuizzWidget::modify_item()
     if (_position_current_widget == 0)
     {
         QList<Question*> questions = db.loadQuestions();
-        Question *question = questions.at(selected);
+        //Question *question = questions.at(selected);
 
         //new ModifyQuestionWidget(false, question);
     }
@@ -153,12 +153,16 @@ void AdminQuizzWidget::modify_item()
     // Themes
     else if (_position_current_widget == 1)
     {
-
+        QStringList themes = db.loadThemes();
+        new ModifyThemeWidget(false, themes.at(selected), this);
     }
 
     // Comments
     else if (_position_current_widget == 2 || _position_current_widget == 3)
     {
+        bool is_positive = (_position_current_widget == 2);
+        QStringList comments = db.loadComments(is_positive);
+        new ModifyCommentWidget(false, is_positive, comments.at(selected), this);
 
     }
 }

@@ -11,14 +11,16 @@ class ModifyThemeWidget : public QWidget
 
     private:
         QLineEdit *_theme;
+        bool _new_theme;
+        int _theme_id;
         QWidget *_caller;
 
     public:
-        explicit ModifyThemeWidget(bool new_theme, QWidget *caller);
+        explicit ModifyThemeWidget(bool new_theme, QString theme, QWidget *caller);
         ~ModifyThemeWidget();
 
     private:
-        void buildWidget(bool new_theme);
+        void buildWidget(QString theme);
 
     private slots:
         void save();

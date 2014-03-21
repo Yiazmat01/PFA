@@ -11,10 +11,17 @@
 #include <QLineEdit>
 #include <QDesktopWidget>
 
-ModifyCommentWidget::ModifyCommentWidget(bool new_comment, bool is_positive, QWidget *caller)
-    : _is_positive(is_positive), _caller(caller)
+ModifyCommentWidget::ModifyCommentWidget(bool new_comment, bool is_positive, QString comment, QWidget *caller)
+    : _new_comment(new_comment), _is_positive(is_positive), _caller(caller)
 {
-    this->buildWidget(new_comment);
+    if ( ! new_comment)
+    {
+        Database db;
+        _comment_id = db.comment_id(is_positive, comment);
+        qDebug() << _comment_id;
+    }
+
+    this->buildWidget(comment);
     this->setWindowModality(Qt::ApplicationModal);
     this->resize(400, 200);
 
@@ -35,7 +42,7 @@ ModifyCommentWidget::~ModifyCommentWidget()
     #endif
 }
 
-void ModifyCommentWidget::buildWidget(bool new_comment)
+void ModifyCommentWidget::buildWidget(QString comment)
 {
     #define MUSIK_BUTTON_STYLE "QPushButton img { width:200%; } QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
                                "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00aaf2, stop: 1 #005676);" \
@@ -47,7 +54,7 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
     // Create label for title
     QLabel *title_label;
 
-    if (new_comment)
+    if (_new_comment)
     {
         if (_is_positive)
             title_label = new QLabel(tr("New good comment"));
@@ -68,8 +75,18 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
     // Create form
     _comment = new QLineEdit;
 
+    if ( ! _new_comment)
+        _comment->setText(comment);
+
     // Create validate and cancel buttons
-    QPushButton *add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+    QPushButton *add_button;
+
+    if (_new_comment)
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+
+    else
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Modify"));
+
     QPushButton *cancel_button = new QPushButton(QIcon(":/images/backward.png"), tr("Cancel"));
 
     connect(add_button, SIGNAL(clicked()), this, SLOT(save()));
@@ -96,7 +113,13 @@ void ModifyCommentWidget::buildWidget(bool new_comment)
 void ModifyCommentWidget::save()
 {
     Database db;
-    db.insertComment(_comment->text(), _is_positive);
+
+    if (_new_comment)
+        db.insertComment(_comment->text(), _is_positive);
+
+    else
+        db.updateComment(_comment_id, _is_positive, _comment->text());
+
     dynamic_cast<AdminQuizzWidget*>(_caller)->reloadTab();
     this->close();
 }

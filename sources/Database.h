@@ -55,11 +55,14 @@ class Database
         int theme_id(QString theme);
         void insertTheme(QString theme);
         QStringList loadThemes();
+        void updateTheme(int theme_id, QString theme);
         void deleteTheme(QString theme);
 
         // Comments
+        int comment_id(bool positive, QString comment);
         void insertComment(QString comment, bool is_positive);
         QStringList loadComments(bool positive);
+        void updateComment(int comment_id, bool positive, QString comment);
         void deleteComment(QString comment);
 
     private:

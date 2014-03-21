@@ -11,10 +11,17 @@
 #include <QLineEdit>
 #include <QDesktopWidget>
 
-ModifyThemeWidget::ModifyThemeWidget(bool new_theme, QWidget *caller)
-    : _caller(caller)
+ModifyThemeWidget::ModifyThemeWidget(bool new_theme, QString theme, QWidget *caller)
+    : _new_theme(new_theme), _caller(caller)
 {
-    this->buildWidget(new_theme);
+    if ( ! _new_theme)
+    {
+        Database db;
+        _theme_id = db.theme_id(theme);
+        qDebug() << _theme_id;
+    }
+
+    this->buildWidget(theme);
     this->setWindowModality(Qt::ApplicationModal);
     this->resize(400, 200);
 
@@ -35,7 +42,7 @@ ModifyThemeWidget::~ModifyThemeWidget()
     #endif
 }
 
-void ModifyThemeWidget::buildWidget(bool new_theme)
+void ModifyThemeWidget::buildWidget(QString theme)
 {
     #define MUSIK_BUTTON_STYLE "QPushButton img { width:200%; } QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
                                "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00aaf2, stop: 1 #005676);" \
@@ -47,7 +54,7 @@ void ModifyThemeWidget::buildWidget(bool new_theme)
     // Create label for title
     QLabel *title_label;
 
-    if (new_theme)
+    if (_new_theme)
         title_label = new QLabel(tr("New theme"));
     else
         title_label = new QLabel(tr("Modify theme"));
@@ -57,8 +64,17 @@ void ModifyThemeWidget::buildWidget(bool new_theme)
     // Create form
     _theme = new QLineEdit;
 
+    if ( ! _new_theme)
+        _theme->setText(theme);
+
     // Create validate and cancel buttons
-    QPushButton *add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+    QPushButton *add_button;
+
+    if (_new_theme)
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+    else
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Modify"));
+
     QPushButton *cancel_button = new QPushButton(QIcon(":/images/backward.png"), tr("Cancel"));
 
     connect(add_button, SIGNAL(clicked()), this, SLOT(save()));
@@ -85,7 +101,14 @@ void ModifyThemeWidget::buildWidget(bool new_theme)
 void ModifyThemeWidget::save()
 {
     Database db;
-    db.insertTheme(_theme->text());
+
+    // Add / modify theme
+    if (_new_theme)
+        db.insertTheme(_theme->text());
+
+    else
+        db.updateTheme(_theme_id, _theme->text());
+
     dynamic_cast<AdminQuizzWidget*>(_caller)->reloadTab();
     this->close();
 }
