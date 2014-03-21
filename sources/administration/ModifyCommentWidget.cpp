@@ -18,7 +18,6 @@ ModifyCommentWidget::ModifyCommentWidget(bool new_comment, bool is_positive, QSt
     {
         Database db;
         _comment_id = db.comment_id(is_positive, comment);
-        qDebug() << _comment_id;
     }
 
     this->buildWidget(comment);

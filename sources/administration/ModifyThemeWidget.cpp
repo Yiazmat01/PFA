@@ -18,7 +18,6 @@ ModifyThemeWidget::ModifyThemeWidget(bool new_theme, QString theme, QWidget *cal
     {
         Database db;
         _theme_id = db.theme_id(theme);
-        qDebug() << _theme_id;
     }
 
     this->buildWidget(theme);
