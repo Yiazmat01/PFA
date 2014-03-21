@@ -10,5 +10,6 @@
         <file>images/next.png</file>
         <file>images/validate.png</file>
         <file>images/tool_metronomix.png</file>
+        <file>images/tool_score.png</file>
     </qresource>
 </RCC>

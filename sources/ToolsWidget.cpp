@@ -40,6 +40,8 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     QLabel *description_label = new QLabel("<ul>"
                                            "<li>" + tr("VLC is useful to listen any kind of musical file (mp3, ogg, etc.)") + "</li>"
                                            "<li>" + tr("Audacity is able to modify your files") + "</li>"
+                                           "<li>" + tr("Metronomix is a metronome") + "</li>"
+                                           "<li>" + tr("MuseScore enables you to edit music scores") + "</li>"
                                            "</ul>");
 
     title_label->setStyleSheet("QLabel { font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto; }");
@@ -49,22 +51,26 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     QPushButton *tool1_button = new QPushButton(QIcon(":/images/tool_vlc.png"), tr("VLC"));
     QPushButton *tool2_button = new QPushButton(QIcon(":/images/tool_audacity.png"), tr("Audacity"));
     QPushButton *tool3_button = new QPushButton(QIcon(":/images/tool_metronomix.png"), tr("Metronomix"));
+    QPushButton *tool4_button = new QPushButton(QIcon(":/images/tool_score.png"), tr("Musescore"));
     QPushButton *back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
 
     connect(tool1_button, SIGNAL(clicked()), this, SLOT(launch_tool1()));
     connect(tool2_button, SIGNAL(clicked()), this, SLOT(launch_tool2()));
     connect(tool3_button, SIGNAL(clicked()), this, SLOT(launch_tool3()));
+    connect(tool4_button, SIGNAL(clicked()), this, SLOT(launch_tool4()));
     connect(back_button, SIGNAL(clicked()), main_window, SLOT(back()));
     connect(back_button, SIGNAL(clicked()), this, SLOT(close()));
 
     tool1_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
     tool2_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
     tool3_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
+    tool4_button->setStyleSheet(MUSIK_TOOLS_BUTTON_STYLE);
     back_button->setStyleSheet(MUSIK_BUTTON_STYLE);
 
     tool1_button->setIconSize(QSize(50, 50));
     tool2_button->setIconSize(QSize(50, 50));
     tool3_button->setIconSize(QSize(50, 50));
+    tool4_button->setIconSize(QSize(50, 50));
     back_button->setIconSize(QSize(25, 25));
 
     // Add widgets
@@ -72,6 +78,7 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     tools_layout->addWidget(tool1_button);
     tools_layout->addWidget(tool2_button);
     tools_layout->addWidget(tool3_button);
+    tools_layout->addWidget(tool4_button);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(title_label);
@@ -139,6 +146,26 @@ void ToolsWidget::launch_tool3() const
     // Mac
     #elif defined(Q_OS_MAC)
         this->launch("metronomix");
+
+    // Others operating systems
+    #else
+        QMessageBox::critical(NULL, tr("Error"), tr("We are sorry, this program is not available on your system"));
+    #endif
+}
+
+void ToolsWidget::launch_tool4() const
+{
+    // Windows
+    #if defined(Q_OS_WIN32)
+        this->launch("windows/musescore/MuseScorePortable.exe", "./tools/windows/musescore/");
+
+    // Unix
+    #elif defined(Q_OS_LINUX)
+        this->launch("musescore");
+
+    // Mac
+    #elif defined(Q_OS_MAC)
+        this->launch("musescore");
 
     // Others operating systems
     #else

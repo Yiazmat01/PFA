@@ -21,6 +21,7 @@ class ToolsWidget : public QWidget
         void launch_tool1() const;
         void launch_tool2() const;
         void launch_tool3() const;
+        void launch_tool4() const;
 };
 
 #endif // TOOLSWIDGET_H

@@ -23,7 +23,8 @@ HEADERS += \
         sources/administration/AdminQuizzWidget.h \
         sources/administration/ModifyQuestionWidget.h \
         sources/administration/ModifyThemeWidget.h \
-        sources/administration/ModifyCommentWidget.h
+        sources/administration/ModifyCommentWidget.h \
+    sources/themeselectionwidget.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -38,7 +39,8 @@ SOURCES += \
         sources/administration/AdminQuizzWidget.cpp \
         sources/administration/ModifyQuestionWidget.cpp \
         sources/administration/ModifyThemeWidget.cpp \
-        sources/administration/ModifyCommentWidget.cpp
+        sources/administration/ModifyCommentWidget.cpp \
+    sources/themeselectionwidget.cpp
 
 #LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
