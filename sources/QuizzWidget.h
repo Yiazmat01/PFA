@@ -42,7 +42,8 @@ class QuizzWidget : public QWidget
         QLabel *_time_left;
 
     public:
-        explicit QuizzWidget(QWidget *parent = 0, QString theme = "NULL");
+        //explicit QuizzWidget(QWidget *parent = 0, QStringList theme);
+        QuizzWidget(QWidget *parent, QStringList theme);
         ~QuizzWidget();
 
     private:

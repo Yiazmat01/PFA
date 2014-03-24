@@ -23,7 +23,7 @@ class ThemeSelectionWidget : public QWidget
     QStringList _themes;
 
     //Selected theme
-    QString _theme;
+    QStringList _themes_chosen;
 
     // Theme layout
     QVBoxLayout *_theme_layout;
@@ -36,10 +36,10 @@ class ThemeSelectionWidget : public QWidget
     QLabel *_theme_label;
 
     // Themes radio buttons
-    QList<QRadioButton*> _themes_radio_buttons;
+    //QList<QRadioButton*> _themes_radio_buttons;
     
     //Themes check boxes
-    //QList<QCheckBox*> _themes_check_boxes;
+    QList<QCheckBox*> _themes_check_boxes;
 
     // Control buttons and back button
     QPushButton *_theme_button;
@@ -59,7 +59,7 @@ class ThemeSelectionWidget : public QWidget
 
 
  signals:
-    void choiceDone();
+    void choiceDone(const QStringList &);
     private slots:
     void showTheme(QStringList themes);
     void theme();

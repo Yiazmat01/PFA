@@ -24,7 +24,7 @@ HEADERS += \
         sources/administration/ModifyQuestionWidget.h \
         sources/administration/ModifyThemeWidget.h \
         sources/administration/ModifyCommentWidget.h \
-        sources/themeSelectionWidget.h
+        sources/ThemeSelectionWidget.h
 
 SOURCES += \
 	sources/MainWindow.cpp \
@@ -40,7 +40,7 @@ SOURCES += \
         sources/administration/ModifyQuestionWidget.cpp \
         sources/administration/ModifyThemeWidget.cpp \
         sources/administration/ModifyCommentWidget.cpp \
-        sources/themeSelectionWidget.cpp
+        sources/ThemeSelectionWidget.cpp
 
 #LIBS += -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 

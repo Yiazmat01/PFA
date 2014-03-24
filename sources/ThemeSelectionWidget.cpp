@@ -1,4 +1,4 @@
-#include "themeSelectionWidget.h"
+#include "ThemeSelectionWidget.h"
 #include "QuizzWidget.h"
 #include "MainWindow.h"
 #include "quizz/Quizz.hpp"
@@ -18,8 +18,6 @@
 #include <QGridLayout>
 #include <QCheckBox>
 
-QSignalMapper *mapper = new QSignalMapper();
-
 ThemeSelectionWidget::ThemeSelectionWidget(QWidget *parent) :
     QWidget(parent)
 {
@@ -27,7 +25,6 @@ ThemeSelectionWidget::ThemeSelectionWidget(QWidget *parent) :
   _themes = db->loadThemes();
   this->buildWidget(dynamic_cast<MainWindow*>(parent));        
   this->showTheme(_themes);
-//  _mapper = new QSignalMapper();
 }
 
 void ThemeSelectionWidget::buildWidget(MainWindow *main_window)
@@ -53,8 +50,7 @@ void ThemeSelectionWidget::buildWidget(MainWindow *main_window)
     // Themes radio buttons
     foreach (QString theme, _themes)
     {
-        _themes_radio_buttons.append(new QRadioButton);
-        //_themes_check_boxes.append(new QCheckBox);
+        _themes_check_boxes.append(new QCheckBox);
     }
 
     // Create scrollable area
@@ -72,9 +68,7 @@ void ThemeSelectionWidget::buildWidget(MainWindow *main_window)
     _back_button = new QPushButton(QIcon(":/images/backward.png"), tr("Back"));
 
     connect(_theme_button, SIGNAL(clicked()), this, SLOT(theme()));
-    connect(this, SIGNAL(choiceDone()), mapper, SLOT(map()));
-    connect(mapper, SIGNAL(mapped(const QString &)), main_window, SLOT(launch_quizz(const QString &)));
-    //connect(_theme_button, SIGNAL(clicked()), main_window, SLOT(launch_quizz()));
+    connect(this, SIGNAL(choiceDone(const QStringList &)), main_window, SLOT(launch_quizz(const QStringList &)));
     connect(_theme_button, SIGNAL(clicked()), this, SLOT(close()));
     connect(_back_button, SIGNAL(clicked()), main_window, SLOT(back()));
     connect(_back_button, SIGNAL(clicked()), this, SLOT(close()));
@@ -100,15 +94,13 @@ void ThemeSelectionWidget::buildWidget(MainWindow *main_window)
     int i = 0;
     foreach (QString theme, _themes)
     {
-        _grid_layout->addWidget(_themes_radio_buttons.at(i));
-        //_grid_layout->addWidget(_themes_check_boxes.at(i));
+        _grid_layout->addWidget(_themes_check_boxes.at(i));
         i++;
     }
 
     _theme_layout->addLayout(buttons_layout);
 
-    this->setStyleSheet("QRadioButton { font: 15px; font-family: trebuchet ms; color: #573; margin-left: 100px }");
-    //this->setStyleSheet("QCheckBox { font: 15px; font-family: trebuchet ms; color: #573; margin-left: 100px }");
+    this->setStyleSheet("QCheckBox { font: 15px; font-family: trebuchet ms; color: #573; margin-left: 100px }");
 
 
     _theme_layout->setAlignment(Qt::AlignHCenter);
@@ -129,15 +121,6 @@ void ThemeSelectionWidget::showTheme(QStringList themes)
     int i = 0;
     foreach (QString theme, themes)
     {
-
-        if(i == 0)
-            _themes_radio_buttons.at(i)->setChecked(true);
-        _themes_radio_buttons.at(i)->setText(themes.at(i));
-        _themes_radio_buttons.at(i)->setCheckable(true);
-        _themes_radio_buttons.at(i)->setStyleSheet("font-weight: normal; color: #573;");
-        _themes_radio_buttons.at(i)->show();
-        i++;
-        /*
         if(i == 0)
             _themes_check_boxes.at(i)->setChecked(true);
         _themes_check_boxes.at(i)->setText(themes.at(i));
@@ -145,7 +128,7 @@ void ThemeSelectionWidget::showTheme(QStringList themes)
         _themes_check_boxes.at(i)->setStyleSheet("font-weight: normal; color: #573;");
         _themes_check_boxes.at(i)->show();
         i++;
-        */
+
     }
 
 
@@ -169,11 +152,9 @@ void ThemeSelectionWidget::theme()
     foreach (QString theme, _themes)
     {
         //selected theme
-        if (_themes_radio_buttons.at(i)->isChecked())
-            _theme = theme;
+        if (_themes_check_boxes.at(i)->isChecked())
+            _themes_chosen << theme;
         i++;
     }
-    qDebug() << "THEME : " << _theme;
-    mapper->setMapping(this, _theme);
-    emit choiceDone();
+    emit choiceDone(_themes_chosen);
 }

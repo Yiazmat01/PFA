@@ -4,7 +4,7 @@
 #include "ToolsWidget.h"
 #include "Database.h"
 #include "administration/AdminQuizzWidget.h"
-#include "themeselectionwidget.h"
+#include "ThemeSelectionWidget.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -103,10 +103,9 @@ void MainWindow::launch_quizz_selection()
     this->setCentralWidget(new ThemeSelectionWidget(this));
 }
 
-void MainWindow::launch_quizz(QString theme)
+void MainWindow::launch_quizz(QStringList themes)
 {
-    qDebug() << "THEME :" << theme;
-    this->setCentralWidget(new QuizzWidget(this, theme));
+    this->setCentralWidget(new QuizzWidget(this, themes));
 }
 
 void MainWindow::launch_game()
