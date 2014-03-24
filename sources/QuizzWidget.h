@@ -29,7 +29,7 @@ class QuizzWidget : public QWidget
 
         // Control buttons and back button
         QPushButton *_answer_button;
-        QPushButton *_next_question_button;
+        QPushButton *_next_question_button;     
         QPushButton *_back_button;
 
         Quizz *_quizz;
@@ -42,7 +42,7 @@ class QuizzWidget : public QWidget
         QLabel *_time_left;
 
     public:
-        explicit QuizzWidget(QWidget *parent = 0);
+        explicit QuizzWidget(QWidget *parent = 0, QString theme = "NULL");
         ~QuizzWidget();
 
     private:

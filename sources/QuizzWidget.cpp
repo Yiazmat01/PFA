@@ -14,11 +14,12 @@
 #include <QTextEdit>
 #include <QTimer>
 
-QuizzWidget::QuizzWidget(QWidget *parent) :
+QuizzWidget::QuizzWidget(QWidget *parent, QString theme) :
     QWidget(parent)
 {
+    qDebug() << "THEME" << theme;
     Database* db = new Database();
-    QList<Question*> questions = db->loadQuestions();
+    QList<Question*> questions = db->loadQuestions(theme);
     _quizz = new Quizz(questions);
 
     _positive_comments = db->loadComments(true);

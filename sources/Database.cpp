@@ -159,6 +159,55 @@ QList<Question*> Database::loadQuestions()
     return questions;
 }
 
+QList<Question*> Database::loadQuestions(QString theme)
+{
+    QList<Question*> questions;
+
+    if (theme == NULL)
+        return questions;
+    QVariantList vars;
+    vars << theme_id(theme);
+
+    // Get questions
+    if ( ! this->exec("SELECT q.id, q.question, q.explanation, q.difficulty, q.year, q.nb_answers, q.id_theme, a.answer "
+                      "FROM Questions q JOIN Answers a ON a.id_question = q.id "
+                      "WHERE q.id_theme = ?"
+                      "ORDER BY a.id",vars))
+        return questions;
+
+    QStringList answers;
+    int nb_answers_max = 0;
+
+    while (_query->next())
+    {
+        // New question
+        if (nb_answers_max == 0)
+        {
+            nb_answers_max = _query->value(5).toInt();
+            answers.clear();
+        }
+
+        // Add current answer to the set
+        answers << _query->value(7).toString();
+
+        // All answers are taken, we create the question
+        if (answers.size() == nb_answers_max)
+        {
+            questions << new Question(_query->value(0).toInt(),
+                                      _query->value(1).toString(),
+                                      answers,
+                                      _query->value(2).toString(),
+                                      _query->value(3).toInt(),
+                                      _query->value(4).toInt(),
+                                      _query->value(6).toInt());
+            nb_answers_max = 0;
+        }
+    }
+    this->clear();
+    return questions;
+}
+
+
 void Database::updateQuestion(Question *question)
 {
     if (question != NULL)

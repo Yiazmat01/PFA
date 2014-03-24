@@ -4,6 +4,7 @@
 #include "ToolsWidget.h"
 #include "Database.h"
 #include "administration/AdminQuizzWidget.h"
+#include "themeselectionwidget.h"
 
 #include <QMenu>
 #include <QMenuBar>
@@ -70,7 +71,7 @@ void MainWindow::buildWidget()
     QPushButton *game_button = new QPushButton(QIcon(":/images/notes_exploder.png"), tr("NotesExploder"));
 
     connect(tools_button, SIGNAL(clicked()), this, SLOT(launch_tools()));
-    connect(quizz_button, SIGNAL(clicked()), this, SLOT(launch_quizz()));
+    connect(quizz_button, SIGNAL(clicked()), this, SLOT(launch_quizz_selection()));
     connect(game_button, SIGNAL(clicked()), this, SLOT(launch_game()));
 
     tools_button->setStyleSheet(MUSIK_BUTTON_STYLE);
@@ -97,9 +98,15 @@ void MainWindow::launch_tools()
     this->setCentralWidget(new ToolsWidget(this));
 }
 
-void MainWindow::launch_quizz()
+void MainWindow::launch_quizz_selection()
 {
-    this->setCentralWidget(new QuizzWidget(this));
+    this->setCentralWidget(new ThemeSelectionWidget(this));
+}
+
+void MainWindow::launch_quizz(QString theme)
+{
+    qDebug() << "THEME :" << theme;
+    this->setCentralWidget(new QuizzWidget(this, theme));
 }
 
 void MainWindow::launch_game()

@@ -47,6 +47,7 @@ class Database
 
         // Questions
         void insertQuestion(Question *question);
+        QList<Question*> loadQuestions(QString theme);
         QList<Question*> loadQuestions();
         void updateQuestion(Question * question);
         void deleteQuestion(Question * question);
