@@ -54,6 +54,7 @@ class Database
 
         // Themes
         int theme_id(QString theme);
+        QString theme(int id);
         void insertTheme(QString theme);
         QStringList loadThemes();
         void updateTheme(int theme_id, QString theme);

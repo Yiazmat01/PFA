@@ -14,9 +14,9 @@
 #include <QComboBox>
 
 ModifyQuestionWidget::ModifyQuestionWidget(bool new_question, Question *question, QWidget *caller)
-    : _current_question(question), _caller(caller)
+    : _new_question(new_question), _current_question(question), _caller(caller)
 {
-    this->buildWidget(new_question);
+    this->buildWidget();
     this->setWindowModality(Qt::ApplicationModal);
     this->resize(600, 450);
 
@@ -37,7 +37,7 @@ ModifyQuestionWidget::~ModifyQuestionWidget()
     #endif
 }
 
-void ModifyQuestionWidget::buildWidget(bool new_question)
+void ModifyQuestionWidget::buildWidget()
 {
     #define MUSIK_BUTTON_STYLE "QPushButton img { width:200%; } QPushButton { margin: 10px; font: bold 20px; font-family: trebuchet ms; color: #FFF;" \
                                "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #00aaf2, stop: 1 #005676);" \
@@ -49,7 +49,7 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
     // Create label for title
     QLabel *title_label;
 
-    if (new_question)
+    if (_new_question)
         title_label = new QLabel(tr("New question"));
     else
         title_label = new QLabel(tr("Modify question"));
@@ -74,7 +74,13 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
     _difficulty->addItems(difficulties);
 
     // Create validate and cancel buttons
-    QPushButton *add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+    QPushButton *add_button;
+
+    if (_new_question)
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Add"));
+    else
+        add_button = new QPushButton(QIcon(":/images/backward.png"), tr("Modify"));
+
     QPushButton *cancel_button = new QPushButton(QIcon(":/images/backward.png"), tr("Cancel"));
 
     connect(add_button, SIGNAL(clicked()), this, SLOT(save()));
@@ -112,11 +118,18 @@ void ModifyQuestionWidget::buildWidget(bool new_question)
     layout->addWidget(_explanation);
 
     // Pre-fill some fields
-   /* if ( ! new_question)
+    if ( ! _new_question)
     {
-       // _theme->setCurrentText(_question->theme());
-      // _difficulty->setCurrentIndex(_current_question->difficulty() - 1);
-    }*/
+        _theme->setCurrentText(db.theme(_current_question->theme()));
+        _year->setText(QString::number(_current_question->year()));
+        _difficulty->setCurrentIndex(_current_question->difficulty() - 1);
+        _question->setText(_current_question->question());
+
+        for (int i = 0; i < 4; i++)
+            _answers.at(i)->setText(_current_question->answer(i));
+
+        _explanation->setText(_current_question->explanation());
+    }
 
     // Buttons layout
     QHBoxLayout *buttons_layout = new QHBoxLayout;
@@ -138,9 +151,18 @@ void ModifyQuestionWidget::save()
     Database db;
     int theme_id = db.theme_id(_theme->currentText());
 
-    Question question(-1, _question->text(), answers, _explanation->toPlainText(), _difficulty->currentText().toInt(), _year->text().toInt(), theme_id);
+    if (_new_question)
+    {
+        Question question(-1, _question->text(), answers, _explanation->toPlainText(), _difficulty->currentText().toInt(), _year->text().toInt(), theme_id);
+        db.insertQuestion(&question);
+    }
 
-    db.insertQuestion(&question);
+    else
+    {
+         Question question(_current_question->id(), _question->text(), answers, _explanation->toPlainText(), _difficulty->currentText().toInt(), _year->text().toInt(), theme_id);
+         db.updateQuestion(&question);
+    }
+
     dynamic_cast<AdminQuizzWidget*>(_caller)->reloadTab();
     this->close();
 }

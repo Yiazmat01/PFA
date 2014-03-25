@@ -145,9 +145,8 @@ void AdminQuizzWidget::modify_item()
     if (_position_current_widget == 0)
     {
         QList<Question*> questions = db.loadQuestions();
-        //Question *question = questions.at(selected);
-
-        //new ModifyQuestionWidget(false, question);
+        Question *question = questions.at(selected);
+        new ModifyQuestionWidget(false, question, this);
     }
 
     // Themes

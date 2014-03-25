@@ -74,16 +74,19 @@ void ToolsWidget::buildWidget(MainWindow *main_window)
     back_button->setIconSize(QSize(25, 25));
 
     // Add widgets
-    QHBoxLayout *tools_layout = new QHBoxLayout;
-    tools_layout->addWidget(tool1_button);
-    tools_layout->addWidget(tool2_button);
-    tools_layout->addWidget(tool3_button);
-    tools_layout->addWidget(tool4_button);
+    QHBoxLayout *tools_layout1 = new QHBoxLayout;
+    tools_layout1->addWidget(tool1_button);
+    tools_layout1->addWidget(tool2_button);
+
+    QHBoxLayout *tools_layout2 = new QHBoxLayout;
+    tools_layout2->addWidget(tool3_button);
+    tools_layout2->addWidget(tool4_button);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(title_label);
     layout->addWidget(description_label);
-    layout->addLayout(tools_layout);
+    layout->addLayout(tools_layout1);
+    layout->addLayout(tools_layout2);
     layout->addWidget(back_button);
 }
 

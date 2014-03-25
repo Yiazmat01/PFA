@@ -236,6 +236,24 @@ void Database::deleteQuestion(Question *question)
 //--------------------------------------------------------------------
 //        Themes
 //--------------------------------------------------------------------
+QString Database::theme(int id)
+{
+    // Create vars list for prepared query
+    QVariantList vars;
+    vars << id;
+    QString theme;
+
+    // Select themes
+    if (this->exec("SELECT theme FROM Themes WHERE id = ?", vars))
+    {
+        _query->next();
+        theme = _query->value(0).toString();
+    }
+
+    this->clear();
+    return theme;
+}
+
 int Database::theme_id(QString theme)
 {
     // Create vars list for prepared query

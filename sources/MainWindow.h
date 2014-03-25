@@ -21,7 +21,6 @@ class MainWindow : public QMainWindow
         void launch_tools();
         void launch_quizz(QStringList theme);
         void launch_quizz_selection();
-        void launch_game();
         void back();
         void launch_admin_quizz();
 };

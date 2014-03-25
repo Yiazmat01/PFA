@@ -1,5 +1,4 @@
 #include "MainWindow.h"
-#include "NotesExploderWidget.h"
 #include "QuizzWidget.h"
 #include "ToolsWidget.h"
 #include "Database.h"
@@ -31,16 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set title
     this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
-
-    // Create database
-  //  Database* db = new Database();
-   // db->create();
-    //QList<Question*> questionList = db->loadQuestions();
-
-    //db->updateQuestion(questionList.value(0));
-    //db->deleteTheme("mon theme");
-
-    //questionList.value(i)->set...
 }
 
 MainWindow::~MainWindow()
@@ -68,19 +57,15 @@ void MainWindow::buildWidget()
     // Create main window buttons
     QPushButton *tools_button = new QPushButton(QIcon(":/images/tools.png"), tr("Tools"));
     QPushButton *quizz_button = new QPushButton(QIcon(":/images/quizz.png"), tr("Quizz"));
-    QPushButton *game_button = new QPushButton(QIcon(":/images/notes_exploder.png"), tr("NotesExploder"));
 
     connect(tools_button, SIGNAL(clicked()), this, SLOT(launch_tools()));
     connect(quizz_button, SIGNAL(clicked()), this, SLOT(launch_quizz_selection()));
-    connect(game_button, SIGNAL(clicked()), this, SLOT(launch_game()));
 
     tools_button->setStyleSheet(MUSIK_BUTTON_STYLE);
     quizz_button->setStyleSheet(MUSIK_BUTTON_STYLE);
-    game_button->setStyleSheet(MUSIK_BUTTON_STYLE);
 
     tools_button->setIconSize(QSize(25, 25));
     quizz_button->setIconSize(QSize(25, 25));
-    game_button->setIconSize(QSize(25, 25));
 
     // Add widgets
     _main_widget = new QWidget(this);
@@ -90,7 +75,6 @@ void MainWindow::buildWidget()
     layout->addWidget(description_label);
     layout->addWidget(tools_button);
     layout->addWidget(quizz_button);
-    layout->addWidget(game_button);
 }
 
 void MainWindow::launch_tools()
@@ -106,11 +90,6 @@ void MainWindow::launch_quizz_selection()
 void MainWindow::launch_quizz(QStringList themes)
 {
     this->setCentralWidget(new QuizzWidget(this, themes));
-}
-
-void MainWindow::launch_game()
-{
-    this->setCentralWidget(new NotesExploderWidget(this));
 }
 
 void MainWindow::launch_admin_quizz()

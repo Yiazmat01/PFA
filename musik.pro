@@ -15,7 +15,6 @@ HEADERS += \
 	sources/MainWindow.h \
 	sources/ToolsWidget.h \
 	sources/QuizzWidget.h \
-	sources/NotesExploderWidget.h \
 	sources/Database.h \
         sources/quizz/Question.hpp \
         sources/quizz/Score.hpp \
@@ -31,7 +30,6 @@ SOURCES += \
 	sources/main.cpp \
 	sources/ToolsWidget.cpp \
 	sources/QuizzWidget.cpp \
-	sources/NotesExploderWidget.cpp \
 	sources/Database.cpp \
         sources/quizz/Question.cpp \
         sources/quizz/Score.cpp \

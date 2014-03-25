@@ -13,6 +13,10 @@ class ModifyQuestionWidget : public QWidget
     Q_OBJECT
 
     private:
+        bool _new_question;
+        Question *_current_question;
+        QWidget *_caller;
+
         QComboBox *_theme;
         QComboBox *_difficulty;
         QLineEdit *_question;
@@ -20,15 +24,12 @@ class ModifyQuestionWidget : public QWidget
         QList<QLineEdit*> _answers;
         QTextEdit *_explanation;
 
-        Question *_current_question;
-        QWidget *_caller;
-
     public:
         explicit ModifyQuestionWidget(bool new_question, Question *question, QWidget *caller);
         ~ModifyQuestionWidget();
 
     private:
-        void buildWidget(bool new_question);
+        void buildWidget();
 
     private slots:
         void save();
