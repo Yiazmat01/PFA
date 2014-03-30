@@ -120,7 +120,7 @@ void ModifyQuestionWidget::buildWidget()
     // Pre-fill some fields
     if ( ! _new_question)
     {
-        _theme->setCurrentText(db.theme(_current_question->theme()));
+        //_theme->setCurrentText(db.theme(_current_question->theme()));
         _year->setText(QString::number(_current_question->year()));
         _difficulty->setCurrentIndex(_current_question->difficulty() - 1);
         _question->setText(_current_question->question());
