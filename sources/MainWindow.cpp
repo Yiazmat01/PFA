@@ -30,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Set title
     this->setWindowTitle("MuSIK : Musical Software Instrument for Kids");
+    
+    // Set icon
+    this->setWindowIcon(QIcon(":/images/icon.png"));
 }
 
 MainWindow::~MainWindow()
