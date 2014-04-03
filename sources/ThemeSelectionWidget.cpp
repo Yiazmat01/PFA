@@ -44,7 +44,7 @@ void ThemeSelectionWidget::buildWidget(MainWindow *main_window)
     title_label->setStyleSheet("font: bold 20px; font-family: trebuchet ms; color: #57E; margin: 0 auto;");
 
     //Create label for description
-    _theme_label = new QLabel("Select a theme : ");
+    _theme_label = new QLabel(tr("Please select a theme : "));
     _theme_label->setStyleSheet("QLabel { font: 14px; font-family: trebuchet ms; margin: 0 auto; }");
   
     // Themes radio buttons
