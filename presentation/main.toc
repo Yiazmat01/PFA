@@ -1,0 +1,9 @@
+\beamer@endinputifotherversion {3.10pt}
+\select@language {french}
+\beamer@sectionintoc {1}{Exemple}{5}{0}{1}
+\beamer@sectionintoc {2}{Pr\IeC {\'e}sentation}{12}{0}{2}
+\beamer@sectionintoc {3}{Notre solution : la cl\IeC {\'e} USB}{14}{0}{3}
+\beamer@sectionintoc {4}{Organisation}{17}{0}{4}
+\beamer@sectionintoc {5}{Conception et d\IeC {\'e}veloppement}{20}{0}{5}
+\beamer@sectionintoc {6}{Probl\IeC {\`e}mes rencontr\IeC {\'e}s}{23}{0}{6}
+\beamer@sectionintoc {7}{Perspectives d'\IeC {\'e}volution}{26}{0}{7}

@@ -1,0 +1,105 @@
+\documentclass[french]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+
+\usepackage{babel}
+
+
+%CHOIX DU THEME et/ou DE SA COULEUR
+% => essayer diffÃ©rents thÃ¨mes 
+% voir http://mcclinews.free.fr/latex/beamergalerie/completsgalerie.html
+\usetheme{PaloAlto}
+%\usetheme{Madrid}
+%\usetheme{AnnArbor}
+%\usetheme{Copenhagen}
+
+% voir http://mcclinews.free.fr/latex/beamergalerie/colorgalerie.html
+%\usecolortheme{crane}
+%\usecolortheme{seahorse}
+%\usecolortheme{albatross}
+\usecolortheme{dolphin}
+%\useoutertheme[left]{sidebar}
+
+
+%Pour le TITLEPAGE
+\title{Exemple de Beamer}
+\subtitle{Initiation master~1}
+\author[Nom (court)]{Nom (long) de l'auteur}
+\date{Avril 2014}
+\institute[UT3 -- FSI]{UniversitÃ© Toulouse~3 -- FacultÃ© des sciences et ingÃ©nierie}
+
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	Un environnement \texttt{frame} pour chaque \emph{diapositive}.
+	\visible<2>{Chaque diapo pouvant contenir plusieurs \emph{couches}.}
+\end{frame}
+
+
+\begin{frame}{On peut mettre un titre : Sommaire}
+	\tableofcontents
+\end{frame}
+
+\section{Exemple}
+\begin{frame}{La section 1 commence}
+	blabla
+\end{frame}
+
+\begin{frame}
+	Un \textbf<2,3>{texte} en gras. 
+	\visible<3>{Un texte visible sur la 3\ieme{} couche}
+\end{frame}
+
+\begin{frame}{Titre (facultatif)} 
+\framesubtitle{Sous titre (facultatif aussi)}
+	\begin{block}{Remarque}
+	Un bloc
+	\end{block}
+	
+	\begin{alertblock}{Proposition}
+	Un bloc alerte
+	\end{alertblock}
+	
+	\begin{exampleblock}<2>{Exemple}
+	Un bloc exemple qui est visible sur la 2\ieme{} couche : $f(x)=2x$.
+	\end{exampleblock}
+\end{frame}
+
+\begin{frame}{La section 2 commence}
+ voir d'autres exemples dans le dossier exemple.
+\end{frame}
+
+\input{presentation.tex}
+
+\input{solution.tex}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
+\input{organisation.tex}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
+\input{conception.tex}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
+\input{problemes.tex}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
+\input{perspectives.tex}
+\begin{frame}
+\tableofcontents[currentsection]
+\end{frame}
+\input{bonus_track.tex}
+
+
+\end{document}
