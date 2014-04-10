@@ -4,66 +4,66 @@
 <context>
     <name>AdminQuizzWidget</name>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="40"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="40"/>
         <source>Administration</source>
         <translation>Administration</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="58"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="58"/>
         <source>Add new question</source>
         <translation>Ajouter une nouvelle question</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="69"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="69"/>
         <source>Add new theme</source>
         <translation>Ajouter un nouveau thème</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="79"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="79"/>
         <source>Add new good answer</source>
         <translation>Ajouter un commentaire de bonne réponse</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="89"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="89"/>
         <source>Add new bad answer</source>
         <translation>Ajouter un commentaire de mauvaise réponse</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="97"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="97"/>
         <source>Back</source>
         <translation>Retour</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="106"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="106"/>
         <source>Questions/Answers</source>
         <translation>Questions/Réponses</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="107"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="107"/>
         <source>Themes</source>
         <translation>Thèmes</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="108"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="108"/>
         <source>Good answers</source>
         <translation>Bonnes réponses</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="109"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="109"/>
         <source>Bad answers</source>
         <translation>Mauvaises réponses</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="225"/>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="250"/>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="276"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="225"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="250"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="276"/>
         <source>Modify</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="226"/>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="251"/>
-        <location filename="../sources/AdminQuizzWidget.cpp" line="277"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="226"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="251"/>
+        <location filename="../sources/administration/AdminQuizzWidget.cpp" line="277"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
