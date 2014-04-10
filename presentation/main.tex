@@ -4,104 +4,92 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath, amssymb}
+\usepackage[frenchb]{babel}
 
-\usepackage{babel}
 \setbeamertemplate{itemize item}[ball]
 \setbeamertemplate{itemize subitem}[triangle]
 \setbeamertemplate{itemize subsubitem}[circle]
 
-%CHOIX DU THEME et/ou DE SA COULEUR
+% CHOIX DU THEME et/ou DE SA COULEUR
 % => essayer diffÃ©rents thÃ¨mes 
 % voir http://mcclinews.free.fr/latex/beamergalerie/completsgalerie.html
 \usetheme{PaloAlto}
-%\usetheme{Madrid}
-%\usetheme{AnnArbor}
-%\usetheme{Copenhagen}
+% \usetheme{Madrid}
+% \usetheme{AnnArbor}
+% \usetheme{Copenhagen}
 
 % voir http://mcclinews.free.fr/latex/beamergalerie/colorgalerie.html
-%\usecolortheme{crane}
-%\usecolortheme{seahorse}
-%\usecolortheme{albatross}
+% \usecolortheme{crane}
+% \usecolortheme{seahorse}
+% \usecolortheme{albatross}
 \usecolortheme{dolphin}
-%\useoutertheme[left]{sidebar}
+% \useoutertheme[left]{sidebar}
 
 
-%Pour le TITLEPAGE
-\title{Exemple de Beamer}
-\subtitle{Initiation master~1}
-\author[Nom (court)]{Nom (long) de l'auteur}
+% Pour le TITLEPAGE
+\title{\textsc{MuSIK}}
+\subtitle{Musical Software Instruments for Kids}
 \date{Avril 2014}
-\institute[UT3 -- FSI]{UniversitÃ© Toulouse~3 -- FacultÃ© des sciences et ingÃ©nierie}
-
+\institute{\textsc{ENSEIRB-MatMeca}}
+\logo{\includegraphics[height=10mm]{logo.png}}
 
 \begin{document}
 
 \begin{frame}
-	\titlepage
+  \titlepage
 \end{frame}
 
-\begin{frame}
-	Un environnement \texttt{frame} pour chaque \emph{diapositive}.
-	\visible<2>{Chaque diapo pouvant contenir plusieurs \emph{couches}.}
+\begin{frame}{\textsc{\Large Projet au Fil de l'Année 2014}\\[0.5cm]}
+  \begin{center}
+    Clé USB de logiciels pour élèves d'école de musique\\
+    \begin{minipage}{0.5\textwidth}
+      \visible<2->{
+        \begin{flushleft} \large
+          \emph{Auteurs:}\\
+          \textsc{Dando} Louis-Marie\\
+          \textsc{Fatsawo} Yoan\\
+          \textsc{Jomard} Arnaud\\
+          \textsc{Migot} Jean-Luc\\
+          \textsc{Milhet} Louis\\
+          \textsc{Monmarche} Louis\\
+        \end{flushleft}
+      }
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+        \visible<3->{
+          \emph{Responsable Pédagogique :} \\
+          \textsc{Gloess} Paul-Yves\\[0.5cm]
+        }
+        \visible<4->{
+          \emph{Clients :}\\
+          \textsc{Thibault} Samuel
+          \textsc{Furher} Emmanuel
+          \textsc{Durand} Michel
+        }
+      \end{flushleft}
+    \end{minipage}
+    \\[2cm]
+    \large Mars 2014
+  \end{center}
 \end{frame}
 
-
-\begin{frame}{On peut mettre un titre : Sommaire}
-	\tableofcontents
-\end{frame}
-
-\section{Exemple}
-\begin{frame}{La section 1 commence}
-	blabla
-\end{frame}
-
-\begin{frame}
-	Un \textbf<2,3>{texte} en gras. 
-	\visible<3>{Un texte visible sur la 3\ieme{} couche}
-\end{frame}
-
-\begin{frame}{Titre (facultatif)} 
-\framesubtitle{Sous titre (facultatif aussi)}
-	\begin{block}{Remarque}
-	Un bloc
-	\end{block}
-	
-	\begin{alertblock}{Proposition}
-	Un bloc alerte
-	\end{alertblock}
-	
-	\begin{exampleblock}<2>{Exemple}
-	Un bloc exemple qui est visible sur la 2\ieme{} couche : $f(x)=2x$.
-	\end{exampleblock}
-\end{frame}
-
-\begin{frame}{La section 2 commence}
- voir d'autres exemples dans le dossier exemple.
+\begin{frame}{Sommaire}
+  \tableofcontents
 \end{frame}
 
 \input{presentation.tex}
 
 \input{solution.tex}
-\begin{frame}
 
-\end{frame}
 \input{organisation.tex}
-\begin{frame}
- 
-\end{frame}
-\input{conception.tex}
-\begin{frame}
- 
-\end{frame}
-\input{problemes.tex}
-\begin{frame}
- 
-\end{frame}
-\input{perspectives.tex}
-\begin{frame}
- 
-\end{frame}
-\input{bonus_track.tex}
 
+\input{conception.tex}
+
+\input{problemes.tex}
+
+\input{perspectives.tex}
+
+\input{conclusion.tex}
 
 \end{document}
