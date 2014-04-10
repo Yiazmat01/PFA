@@ -1,8 +1,46 @@
 \section{Perspectives d'évolution}
 
 \begin{frame}
-\tableofcontents[currentsection]
+  \tableofcontents[currentsection]
 \end{frame}
-\begin{frame}
-lorem lipsum
+% le quiz n'est pas restreint a de la musique
+\begin{frame}{Nouveaux outils}
+  Du fait de notre programmation modulaire, il est possible facilement d'ajouter des logiciels outils indépendamment du projet en le rajoutant à \texttt{ToolWidget.cpp}
+  Par exemple : \\
+  \begin{itemize}
+  \item Un accordeur
+  \item Un enregistreur simplifié
+  \item Un outil ressemblant band-in-the-box
+  \item Et à peu près tout logiciel, à la fantaisie du développeur/ du client
+  \end{itemize}
+  
+  Il faut cependant faire attention aux divers problèmes de garantie et à la taille du logiciel pour pouvoir le garder sur la clef.
 \end{frame}
+
+\begin{frame}{Le quizz-1}
+Le quizz est indépendant de toute notion de musique et est donc réutilisable en dehors de notre logiciel.\\
+\begin{block}{Cependant il peut être bon de modifier :}
+  \begin{itemize}
+  \item la notation, pour prendre en compte la rapidité de réponse
+  \item l'affichage du score en cours, en fonction des attentes des élèves
+  \item la sécurité de l'administration pour éviter que les élèves trichent
+  \end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}{Le quizz-2}
+\begin{block}{Autres améliorations possibles : }
+  \begin{itemize}
+  \item Disposer d'un ensemble de questions/thèmes de base pour le quizz
+  \item Disposer d'une base de données de questions/thèmes sur le net
+  \item la sécurité de l'administration pour éviter que les élèves trichent
+  \end{itemize}  
+\end{block}
+\end{frame}
+
+\begin{frame}{Le jeu}
+  on peut mettre un jeu qui déchire sa grand-mere
+\end{frame}
+
+% partage de la base de donnees du quizz
+%revoir la notation du quizz
+%
