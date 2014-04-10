@@ -3,18 +3,22 @@
 \begin{frame}
   \tableofcontents[currentsection]
 \end{frame}
-% le quiz n'est pas restreint a de la musique
 \begin{frame}{Nouveaux outils}
-  Du fait de notre programmation modulaire, il est possible facilement d'ajouter des logiciels outils indépendamment du projet en le rajoutant à \texttt{ToolWidget.cpp}
-  Par exemple : \\
+  Ajout de logiciels outils possible grace à une programmation modulaire
+\begin{block}{Exemples : }
   \begin{itemize}
   \item Un accordeur
   \item Un enregistreur simplifié
   \item Un outil ressemblant band-in-the-box
   \item Et à peu près tout logiciel, à la fantaisie du développeur/ du client
   \end{itemize}
-  
-  Il faut cependant faire attention aux divers problèmes de garantie et à la taille du logiciel pour pouvoir le garder sur la clef.
+\end{block}
+\begin{alertblock}{Attention}
+  \begin{itemize}
+  \item Aux garanties
+  \item \'A la taille du logiciel pour pouvoir le garder sur la clef.
+  \end{itemize}
+\end{alertblock}
 \end{frame}
 
 \begin{frame}{Le quizz-1}
@@ -39,9 +43,9 @@ Le quizz est indépendant de toute notion de musique et est donc réutilisable e
 \end{frame}
 
 \begin{frame}{Le jeu}
-  on peut mettre un jeu qui déchire sa grand-mere en Shit Fuck My Life
+  \begin{itemize}
+    \item Architecture logicielle prévue pour son intégration (bibliothèque SFML).
+    \item Les spécifications sont déja précisées.
+      \item ajout d'autres jeux possible.
+    \end{itemize}
 \end{frame}
-
-% partage de la base de donnees du quizz
-%revoir la notation du quizz
-%
